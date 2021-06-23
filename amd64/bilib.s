@@ -406,4 +406,114 @@ b20:
 	mov	%rax,-8(sp)
 	jmp	fetch
 
-# TODO: assignment ops
+# =| operator
+.globl b102
+b102:
+	mov	-8(sp),%rax	# value
+	mov	-16(sp),%rbx	# address
+	sub	$8,sp
+	shl	$3,%rbx
+	or	(%rbx),%rax
+	mov	%rax,(%rbx)
+	mov	%rax,-8(sp)
+	jmp	fetch
+
+# =& operator
+.globl b103
+b103:
+	mov	-8(sp),%rax	# value
+	mov	-16(sp),%rbx	# address
+	sub	$8,sp
+	shl	$3,%rbx
+	and	(%rbx),%rax
+	mov	%rax,(%rbx)
+	mov	%rax,-8(sp)
+	jmp	fetch
+
+# =>> operator
+.globl b112
+b112:
+	mov	-8(sp),%rcx	# value
+	mov	-16(sp),%rbx	# address
+	sub	$8,sp
+	shl	$3,%rbx
+	mov	(%rbx),%rax
+	shr	%cl,%rax
+	mov	%rax,(%rbx)
+	mov	%rax,-8(sp)
+	jmp	fetch
+
+# =<< operator
+.globl b113
+b113:
+	mov	-8(sp),%rcx	# value
+	mov	-16(sp),%rbx	# address
+	sub	$8,sp
+	shl	$3,%rbx
+	mov	(%rbx),%rax
+	shl	%cl,%rax
+	mov	%rax,(%rbx)
+	mov	%rax,-8(sp)
+	jmp	fetch
+
+# =+ operator
+.globl b114
+b114:
+	mov	-8(sp),%rax	# value
+	mov	-16(sp),%rbx	# address
+	sub	$8,sp
+	shl	$3,%rbx
+	add	(%rbx),%rax
+	mov	%rax,(%rbx)
+	mov	%rax,-8(sp)
+	jmp	fetch
+
+# =- operator
+.globl b115
+b115:
+	mov	-8(sp),%rax	# value
+	mov	-16(sp),%rbx	# address
+	sub	$8,sp
+	shl	$3,%rbx
+	sub	%rax,(%rbx)
+	mov	(%rbx),%rax
+	mov	%rax,-8(sp)
+	jmp	fetch
+
+# =% operator
+.globl b116
+b116:
+	xor	%rdx,%rdx
+	mov	-16(sp),%rbx	# address
+	shl	$3,%rbx
+	mov	(%rbx),%rax
+	idivq	-8(sp)
+	sub	$8,sp
+	mov	%rdx,(%rbx)
+	mov	%rdx,-8(sp)
+	jmp	fetch
+
+# =* operator
+.globl b117
+b117:
+	mov	-16(sp),%rbx	# address
+	shl	$3,%rbx
+	mov	(%rbx),%rax
+	mulq	-8(sp)
+	sub	$8,sp
+	mov	%rax,(%rbx)
+	mov	%rax,-8(sp)
+	jmp	fetch
+
+# =/ operator
+.globl b120
+b120:
+	xor	%rdx,%rdx
+	mov	-16(sp),%rbx	# address
+	shl	$3,%rbx
+	mov	(%rbx),%rax
+	idivq	-8(sp)
+	sub	$8,sp
+	mov	%rax,(%rbx)
+	mov	%rax,-8(sp)
+	jmp	fetch
