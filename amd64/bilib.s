@@ -2,12 +2,13 @@
 .set sp, %r14
 .set pc, %r15
 
-.extern fetch
-
 .macro	FETCH skip=0
 	add $8+\skip, pc
 	jmp *-8(pc)
 .endm
+
+
+.extern fetch
 
 # set stack
 .globl s

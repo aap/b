@@ -1,13 +1,20 @@
 .set dp, %r13
 .set sp, %r14
 .set pc, %r15
+
+.macro	FETCH skip=0
+	add $8+\skip, pc
+	jmp *-8(pc)
+.endm
+
+
 stacksz = 1000
 .bss
 .align 8
 stack:	.space	8*stacksz
 .text
 
-.globl	main
+.globl	main, fetch
 main:
 	lea	stack(%rip),sp
 	mov	sp,dp
@@ -54,6 +61,8 @@ main:
 1:
 
 	call	startchain
+fetch:
+	FETCH
 init:
 	.quad	x, _main
 	.quad	n1, 1f
