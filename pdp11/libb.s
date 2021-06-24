@@ -1,6 +1,6 @@
-.pc = r3
-.dp = r4
-.sp = r5
+ipc = r3
+idp = r4
+isp = r5
 
 .globl exit
 exit:	sys	1.
@@ -29,9 +29,9 @@ sysret:	bcc	1f
 _putchar: 1f
 .text
 1:	1f
-1:	mov	.dp,.sp
-	cmp	(.sp)+,(.sp)+
-	mov	(.sp)+,ch	/ get character
+1:	mov	idp,isp
+	cmp	(isp)+,(isp)+
+	mov	(isp)+,ch	/ get character
 	tstb	ch+1	/ check if one or two chars
 	beq	1f	/ one char
 /	swab	ch	/ sure about swab here?
@@ -54,8 +54,8 @@ _flush:	1f
 _getchar: 1f
 .text
 1:	1f
-1:	mov	.dp,.sp
-	cmp	(.sp)+,(.sp)+
+1:	mov	idp,isp
+	cmp	(isp)+,(isp)+
 	mov	$1,-(sp)
 	mov	$ch,-(sp)
 	mov	_fin,-(sp)
@@ -63,7 +63,7 @@ _getchar: 1f
 	tst	r0
 	bne	1f
 	clr	ch
-1:	mov	ch,(.sp)+
+1:	mov	ch,(isp)+
 	jmp	n7
 
 .data
@@ -79,13 +79,13 @@ _ferr:	2
 _char: 1f
 .text
 1:	1f
-1:	mov	.dp,.sp
-	cmp	(.sp)+,(.sp)+
-	mov	(.sp)+,r1	/ string
+1:	mov	idp,isp
+	cmp	(isp)+,(isp)+
+	mov	(isp)+,r1	/ string
 	asl	r1
-	add	(.sp),r1	/ add index
+	add	(isp),r1	/ add index
 	movb	(r1),r0		/ get char
-	mov	r0,(.sp)+
+	mov	r0,(isp)+
 	jmp	n7
 
 .globl _lchar
@@ -93,12 +93,12 @@ _char: 1f
 _lchar: 1f
 .text
 1:	1f
-1:	mov	.dp,.sp
-	cmp	(.sp)+,(.sp)+
-	mov	(.sp)+,r0	/ string
+1:	mov	idp,isp
+	cmp	(isp)+,(isp)+
+	mov	(isp)+,r0	/ string
 	asl	r1
-	add	(.sp)+,r0	/ add index
-	add	(.sp)+,r1	/ char
+	add	(isp)+,r0	/ add index
+	add	(isp)+,r1	/ char
 	movb	r1,(r0)		/ get char
 	jmp	n7
 
@@ -108,7 +108,7 @@ _lchar: 1f
 _exit: 1f
 .text
 1:	1f
-1:	mov	4(.dp),-(sp)
+1:	mov	4(idp),-(sp)
 	jsr	pc,exit
 
 .globl _write
@@ -116,16 +116,16 @@ _exit: 1f
 _write: 1f
 .text
 1:	1f
-1:	mov	.dp,.sp
-	cmp	(.sp)+,(.sp)+
-	mov	(.sp)+,r0	/ fd
-	mov	(.sp)+,r1	/ buf
+1:	mov	idp,isp
+	cmp	(isp)+,(isp)+
+	mov	(isp)+,r0	/ fd
+	mov	(isp)+,r1	/ buf
 	asl	r1
-	mov	(.sp),-(sp)	/ count
+	mov	(isp),-(sp)	/ count
 	mov	r1,-(sp)
 	mov	r0,-(sp)
 	jsr	pc,write
-	mov	r0,(.sp)+
+	mov	r0,(isp)+
 	jmp	n7
 
 .globl _open
@@ -133,16 +133,16 @@ _write: 1f
 _open: 1f
 .text
 1:	1f
-1:	mov	.dp,.sp
-	cmp	(.sp)+,(.sp)+
-	mov	(.sp)+,r0	/ name
+1:	mov	idp,isp
+	cmp	(isp)+,(isp)+
+	mov	(isp)+,r0	/ name
 	asl	r0
-	mov	(.sp)+,r1	/ flags
-	mov	(.sp),-(sp)	/ mode
+	mov	(isp)+,r1	/ flags
+	mov	(isp),-(sp)	/ mode
 	mov	r1,-(sp)
 	mov	r0,-(sp)
 	jsr	pc,open
-	mov	r0,(.sp)+
+	mov	r0,(isp)+
 	jmp	n7
 
 .globl _close
@@ -150,7 +150,7 @@ _open: 1f
 _close: 1f
 .text
 1:	1f
-1:	mov	4(.dp),-(sp)	/ fd
+1:	mov	4(idp),-(sp)	/ fd
 	jsr	pc,close
 	jmp	n11
 
@@ -159,15 +159,15 @@ _close: 1f
 _seek: 1f
 .text
 1:	1f
-1:	mov	.dp,.sp
-	cmp	(.sp)+,(.sp)+
-	mov	(.sp)+,r0	/ fd
-	mov	(.sp)+,r1	/ offset
-	mov	(.sp),-(sp)	/ whence
+1:	mov	idp,isp
+	cmp	(isp)+,(isp)+
+	mov	(isp)+,r0	/ fd
+	mov	(isp)+,r1	/ offset
+	mov	(isp),-(sp)	/ whence
 	mov	r1,-(sp)
 	clr	-(sp)	/ offset high word
 	mov	r0,-(sp)
 	jsr	pc,lseek
-	mov	r0,(.sp)+
+	mov	r0,(isp)+
 	jmp	n7
 

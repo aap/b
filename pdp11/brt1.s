@@ -1,6 +1,6 @@
-.pc = r3
-.dp = r4
-.sp = r5
+ipc = r3
+idp = r4
+isp = r5
 stacksz = 128
 
 .bss
@@ -10,14 +10,14 @@ stack: .=.+stacksz+stacksz
 
 start:
 	jsr	pc,startchain
-	mov	$stack,.sp
-	mov	$bstart,.pc
-	jmp	*(.pc)+
+	mov	$stack,isp
+	mov	$bstart,ipc
+	jmp	*(ipc)+
 
 bstart:	x; _main
 	n1
 	1f
-1:	mov	-(.sp),-(sp)
+1:	mov	-(isp),-(sp)
 	jsr	pc,exit
 
 .globl chain
