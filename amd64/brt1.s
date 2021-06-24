@@ -4,10 +4,10 @@
 stacksz = 1000
 .bss
 .align 8
-stack:	.=.+8*stacksz
+stack:	.space	8*stacksz
 .text
 
-.globl	main, fetch
+.globl	main
 main:
 	lea	stack(%rip),sp
 	mov	sp,dp
@@ -54,10 +54,6 @@ main:
 1:
 
 	call	startchain
-fetch:
-	mov	(pc),%r10
-	add	$8,pc
-	jmp	*%r10
 init:
 	.quad	x, _main
 	.quad	n1, 1f
