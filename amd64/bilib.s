@@ -4,29 +4,32 @@
 
 .extern fetch
 
+.macro	FETCH skip=0
+	add $8+\skip, pc
+	jmp *-8(pc)
+.endm
+
 # set stack
 .globl s
 s:
 	mov	dp,sp
 	add	(pc),sp
-	add	$8,pc
-	jmp	fetch
+	FETCH	8
 
 # transfer if false
 .globl f
 f:
-	orq	$0,-8(sp)
+	cmpq	$0,-8(sp)
 	jz	1f
-	add	$8,pc
-	jmp	fetch
+	FETCH	8
 1:	mov	(pc),pc
-	jmp	fetch
+	FETCH
 
 # transfer
 .globl t
 t:
 	mov	(pc),pc
-	jmp	fetch
+	FETCH
 
 # init automatic vector
 .globl y
@@ -34,11 +37,10 @@ y:
 	mov	dp,%rax
 	add	(pc),%rax
 	add	$8,pc
-	mov	%rax,%rbx
-	shr	$3,%rax
-	inc	%rax
-	mov	%rax,(%rbx)
-	jmp	fetch
+	lea	8(%rax),%rbx
+	shr	$3,%rbx
+	mov	%rbx,(%rax)
+	FETCH
 
 # switch
 .globl z
@@ -50,12 +52,13 @@ z:
 1:	lodsq
 	cmp	%rax,%rbx
 	je	2f
-	lodsq
-	loop	1b
-	mov	%rsi,pc
-	jmp	fetch
+	add	$8, %rsi
+	dec	%rcx
+	jnz	1b
+	lea	8(%rsi), pc	# manually inlined FETCH
+	jmp	*(%rsi)
 2:	mov	(%rsi),pc
-	jmp fetch
+	FETCH
 
 .globl n1,n2,n3
 # call
@@ -68,11 +71,11 @@ n1:
 	mov	(sp),pc
 	mov	dp,(sp)
 	mov	sp,dp
-	jmp	fetch
+	FETCH
 # mark
 n2:	push	sp
 	add	$8,sp
-	jmp	fetch
+	FETCH
 
 # index vector
 .globl n4
@@ -80,16 +83,15 @@ n4:
 	mov	-8(sp),%rax
 	add	-16(sp),%rax
 	sub	$8,sp
-	shl	$3,%rax
-	mov	(%rax),%rax
+	mov	(,%rax,8),%rax
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # goto
 .globl n6
 n6:
 	mov	-8(sp),pc
-	jmp	fetch
+	FETCH
 
 # return with value
 .globl n7
@@ -100,7 +102,7 @@ n7:
 	mov	%rax,(sp)
 	add	$8,sp
 	mov	(sp),pc
-	jmp	fetch
+	FETCH
 
 # return without value
 .globl n11
@@ -109,7 +111,7 @@ n11:
 	mov	(sp),dp
 	add	$8,sp
 	mov	(sp),pc
-	jmp	fetch
+	FETCH
 
 #
 # Push values
@@ -120,46 +122,41 @@ n11:
 va:	add	$8,sp
 iva:	mov	dp,%rax
 	add	(pc),%rax
-	add	$8,pc
 	shr	$3,%rax
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH	8
 
 # push automatic rvalue
 .globl a, ia
 a:	add	$8,sp
 ia:	mov	dp,%rax
 	add	(pc),%rax
-	add	$8,pc
 	mov	(%rax),%rax
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH	8
 
 # push constant
 .globl c, ic
 c:	add	$8,sp
 ic:	mov	(pc),%rax
-	add	$8,pc
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH	8
 
 # push external lvalue
 .globl vx, ivx
 vx:	add	$8,sp
 ivx:	mov	(pc),%rax
-	add	$8,pc
 	shr	$3,%rax
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH	8
 
 # push external rvalue
 .globl x, ix
 x:	add	$8,sp
 ix:	mov	(pc),%rax
-	add	$8,pc
 	mov	(%rax),%rax
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH	8
 
 #
 # Unary operators
@@ -169,26 +166,24 @@ ix:	mov	(pc),%rax
 .globl u2
 u2:
 	negq	-8(sp)
-	jmp	fetch
+	FETCH	8
 
 # * operator
 .globl u3
 u3:
 	mov	-8(sp),%rax
-	shl	$3,%rax
-	mov	(%rax),%rax
+	mov	(,%rax,8),%rax
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # ! operator
 .globl u4
 u4:
 	xor	%rax,%rax
-	orq	$0,-8(sp)
-	jnz	1f
-	inc	%rax
-1:	mov	%rax,-8(sp)
-	jmp	fetch
+	cmpq	%rax,-8(sp)
+	setz	%al
+	mov	%rax,-8(sp)
+	FETCH
 
 # prefix ++ operator
 .globl u5
@@ -199,7 +194,7 @@ u5:
 	inc	%rdx
 	mov	%rdx,(%rax)
 	mov	%rdx,-8(sp)
-	jmp	fetch
+	FETCH
 
 # prefix -- operator
 .globl u6
@@ -210,7 +205,7 @@ u6:
 	dec	%rdx
 	mov	%rdx,(%rax)
 	mov	%rdx,-8(sp)
-	jmp	fetch
+	FETCH
 
 # postfix ++ operator
 .globl u7
@@ -221,7 +216,7 @@ u7:
 	mov	%rdx,-8(sp)
 	inc	%rdx
 	mov	%rdx,(%rax)
-	jmp	fetch
+	FETCH
 
 # postfix -- operator
 .globl u10
@@ -232,7 +227,7 @@ u10:
 	mov	%rdx,-8(sp)
 	dec	%rdx
 	mov	%rdx,(%rax)
-	jmp	fetch
+	FETCH
 
 #
 # Binary operators
@@ -244,28 +239,25 @@ b1:
 	mov	-8(sp),%rax	# value
 	mov	-16(sp),%rbx	# address
 	sub	$8,sp
-	shl	$3,%rbx
-	mov	%rax,(%rbx)
+	mov	%rax,(,%rbx,8)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # | operator
 .globl b2
 b2:
 	mov	-8(sp),%rax
-	or	-16(sp),%rax
+	or	%rax,-16(sp)
 	sub	$8,sp
-	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # & operator
 .globl b3
 b3:
 	mov	-8(sp),%rax
-	and	-16(sp),%rax
+	and	%rax,-16(sp)
 	sub	$8,sp
-	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # == operator
 .globl b4
@@ -273,11 +265,10 @@ b4:
 	xor	%rax,%rax
 	mov	-8(sp),%rdx
 	cmp	-16(sp),%rdx
-	jne	1f
-	inc	%rax
-1:	sub	$8,sp
+	sete	%al
+	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # != operator
 .globl b5
@@ -285,11 +276,10 @@ b5:
 	xor	%rax,%rax
 	mov	-8(sp),%rdx
 	cmp	-16(sp),%rdx
-	je	1f
-	inc	%rax
-1:	sub	$8,sp
+	setne	%al
+	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # <= operator
 .globl b6
@@ -297,11 +287,10 @@ b6:
 	xor	%rax,%rax
 	mov	-16(sp),%rdx
 	cmp	-8(sp),%rdx
-	jg	1f
-	inc	%rax
-1:	sub	$8,sp
+	setle	%al
+	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # < operator
 .globl b7
@@ -309,11 +298,10 @@ b7:
 	xor	%rax,%rax
 	mov	-16(sp),%rdx
 	cmp	-8(sp),%rdx
-	jge	1f
-	inc	%rax
-1:	sub	$8,sp
+	setl	%al
+	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # >= operator
 .globl b10
@@ -321,11 +309,10 @@ b10:
 	xor	%rax,%rax
 	mov	-16(sp),%rdx
 	cmp	-8(sp),%rdx
-	jl	1f
-	inc	%rax
-1:	sub	$8,sp
+	setge	%al
+	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # > operator
 .globl b11
@@ -333,78 +320,75 @@ b11:
 	xor	%rax,%rax
 	mov	-16(sp),%rdx
 	cmp	-8(sp),%rdx
-	jle	1f
-	inc	%rax
-1:	sub	$8,sp
+	setg	%al
+	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # >> operator
 .globl b12
 b12:
 	mov	-16(sp),%rax
-	mov	-8(sp),%rcx
+	mov	-8(sp),%ecx
 	shr	%cl,%rax
 	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # << operator
 .globl b13
 b13:
 	mov	-16(sp),%rax
-	mov	-8(sp),%rcx
+	mov	-8(sp),%ecx
 	shl	%cl,%rax
 	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # + operator
 .globl b14
 b14:
 	mov	-8(sp),%rax
-	add	-16(sp),%rax
+	add	%rax, -16(sp)
 	sub	$8,sp
-	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # - operator
 .globl b15
 b15:
-	mov	-16(sp),%rax
-	sub	-8(sp),%rax
+	mov	-8(sp),%rax
+	sub	%rax, -16(sp)
 	sub	$8,sp
-	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # % operator
 .globl b16
 b16:
-	xor	%rdx,%rdx
 	mov	-16(sp),%rax
+	cqto
 	idivq	-8(sp)
 	sub	$8,sp
 	mov	%rdx,-8(sp)
-	jmp	fetch
+	FETCH
 
 # * operator
 .globl b17
 b17:
-	mov	-16(sp),%rax
-	mulq	-8(sp)
+	mov	-8(sp),%rax
+	imul	-16(sp), %rax
 	sub	$8,sp
-	mov	%rax,-8(sp)
-	jmp	fetch
+	mov	%rax, -8(sp)
+	FETCH
 
 # / operator
 .globl b20
 b20:
-	xor	%rdx,%rdx
 	mov	-16(sp),%rax
+	cqto
 	idivq	-8(sp)
 	sub	$8,sp
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =| operator
 .globl b102
