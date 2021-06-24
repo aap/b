@@ -400,7 +400,7 @@ b102:
 	or	(%rbx),%rax
 	mov	%rax,(%rbx)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =& operator
 .globl b103
@@ -412,12 +412,12 @@ b103:
 	and	(%rbx),%rax
 	mov	%rax,(%rbx)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =>> operator
 .globl b112
 b112:
-	mov	-8(sp),%rcx	# value
+	mov	-8(sp),%ecx	# value
 	mov	-16(sp),%rbx	# address
 	sub	$8,sp
 	shl	$3,%rbx
@@ -425,12 +425,12 @@ b112:
 	shr	%cl,%rax
 	mov	%rax,(%rbx)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =<< operator
 .globl b113
 b113:
-	mov	-8(sp),%rcx	# value
+	mov	-8(sp),%ecx	# value
 	mov	-16(sp),%rbx	# address
 	sub	$8,sp
 	shl	$3,%rbx
@@ -438,7 +438,7 @@ b113:
 	shl	%cl,%rax
 	mov	%rax,(%rbx)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =+ operator
 .globl b114
@@ -450,7 +450,7 @@ b114:
 	add	(%rbx),%rax
 	mov	%rax,(%rbx)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =- operator
 .globl b115
@@ -462,20 +462,20 @@ b115:
 	sub	%rax,(%rbx)
 	mov	(%rbx),%rax
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =% operator
 .globl b116
 b116:
-	xor	%rdx,%rdx
 	mov	-16(sp),%rbx	# address
 	shl	$3,%rbx
 	mov	(%rbx),%rax
+	cqto
 	idivq	-8(sp)
 	sub	$8,sp
 	mov	%rdx,(%rbx)
 	mov	%rdx,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =* operator
 .globl b117
@@ -483,21 +483,21 @@ b117:
 	mov	-16(sp),%rbx	# address
 	shl	$3,%rbx
 	mov	(%rbx),%rax
-	mulq	-8(sp)
+	imul	-8(sp), %rax
 	sub	$8,sp
 	mov	%rax,(%rbx)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH
 
 # =/ operator
 .globl b120
 b120:
-	xor	%rdx,%rdx
 	mov	-16(sp),%rbx	# address
 	shl	$3,%rbx
 	mov	(%rbx),%rax
+	cqto
 	idivq	-8(sp)
 	sub	$8,sp
 	mov	%rax,(%rbx)
 	mov	%rax,-8(sp)
-	jmp	fetch
+	FETCH

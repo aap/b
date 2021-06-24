@@ -37,12 +37,10 @@ _getchar: .quad 1f
 	call	read
 	cmp	$1,%eax
 	jne	1f
-	xor	%rax,%rax
-	movb	ch(%rip),%al
+	movzbl	ch(%rip),%eax
 	mov	%rax,-8(sp)
 	jmp	n7
-1:	mov	$0,%rax
-	mov	%rax,-8(sp)
+1:	movq	$0,-8(sp)
 	jmp	n7
 
 .data
@@ -62,10 +60,9 @@ _char: .quad 1f
 1:	.quad 1f
 1:	add	$24,sp
 	mov	-8(sp),%rax	# string
-	shl	$3,%rax
-	add	(sp),%rax	# offset
+	mov	(sp),%rcx	# offset
 	xor	%rdx,%rdx
-	movb	(%rax),%dl	# load
+	movzbl	(%rcx,%rax,8),%edx	# load
 	mov	%rdx,-8(sp)
 	jmp	n7
 
@@ -75,10 +72,9 @@ _lchar: .quad 1f
 .text
 1:	.quad 1f
 1:	mov	16(sp),%rax	# string
-	shl	$3,%rax
-	add	24(sp),%rax	# offset
-	movb	32(sp),%dl	# char
-	movb	%dl,(%rax)	# store
+	add	24(sp),%rcx	# offset
+	movzbl	32(sp),%edx	# char
+	movb	%dl,(%rcx,%rax,8)	# store
 	jmp	n11
 
 .globl _open
@@ -91,7 +87,7 @@ _open: .quad 1f
 	shl	$3,a0
 	mov	-8(sp),a1	# mode
 	call	open
-	movsxd	%eax,%rax
+	movslq	%eax,%rax
 	mov	%rax,-8(sp)
 	jmp	n7
 
