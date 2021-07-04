@@ -271,9 +271,7 @@ next:
 
 		case Return:
 			if((peektok = token()) == LParen) {
-				setstack();
-				genxpr(pexpr(), 0);
-				pop = 1;
+				gen(pexpr(), 0);
 				printf("*tn7*n");
 				goto semi;
 			}
@@ -281,16 +279,12 @@ next:
 			goto semi;
 
 		case Goto:
-			setstack();
-			genxpr(expr(), 0);
-			pop = 1;
+			gen(expr(), 0);
 			printf("*tn6*n");
 			goto semi;
 
 		case If:
-			setstack();
-			cjmp(pexpr(), l1=loc++);
-			pop = 1;
+			gen(pexpr(), l1=loc++);
 			stmt();
 			if((t=token()) == Keyword & cval == Else) {
 				jmp(l2=loc++);
@@ -307,9 +301,7 @@ next:
 			l1 = brklab;
 			brklab = loc++;
 			label(l2 = loc++);
-			setstack();
-			cjmp(pexpr(), brklab);
-			pop = 1;
+			gen(pexpr(), brklab);
 			stmt();
 			jmp(l2);
 			label(brklab);
@@ -319,9 +311,7 @@ next:
 		case Switch:
 			l1 = brklab;
 			brklab = loc++;
-			setstack();
-			genxpr(pexpr(), 0);
-			pop = 1;
+			gen(pexpr(), 0);
 
 			printf("*tz l%d*n", l2=loc++);
 			sswp = swp;
@@ -409,9 +399,7 @@ next:
 
 	/* Expression statement */
 	peektok = t;
-	setstack();
-	genxpr(expr(), 0);
-	pop = 1;
+	gen(expr(), 0);
 semi:
 	if((t = token()) == Semi)
 		return;
@@ -419,6 +407,17 @@ syntax:
 	error("Statement syntax");
 	errflush(t);
 	goto next;
+}
+
+gen(x, l) {
+	extrn pop;
+
+	setstack();
+	if(l == 0)
+		genxpr(x, 0);
+	else
+		cjmp(x, l);
+	pop = 1;
 }
 
 label(n) printf("l l%d*n", n);

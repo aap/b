@@ -3,7 +3,7 @@
 STUFF='brt2.s printn.s printf.s libb.s bilib.s'
 
 # compile B compiler with the C-B-compiler
-cat bc.b | preproc.sh > bc_x.b
+cat ../bc.b | preproc.sh > bc_x.b
 bb bc_x || exit 1
 rm bc_x.s
 mv a.out bc_c
