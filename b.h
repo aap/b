@@ -179,6 +179,6 @@ void startstr(int n);
 void strchar(int c);
 void endstr(void);
 
-int loc;
-int prevfix;
-FILE *tmpfil1, *tmpfil2;
+extern int loc;
+extern int prevfix;
+extern FILE *tmpfil1, *tmpfil2;

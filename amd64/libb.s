@@ -72,7 +72,7 @@ _lchar: .quad 1f
 .text
 1:	.quad 1f
 1:	mov	16(sp),%rax	# string
-	add	24(sp),%rcx	# offset
+	mov	24(sp),%rcx	# offset
 	movzbl	32(sp),%edx	# char
 	movb	%dl,(%rcx,%rax,8)	# store
 	jmp	n11
@@ -82,10 +82,11 @@ _lchar: .quad 1f
 _open: .quad 1f
 .text
 1:	.quad 1f
-1:	add	$32,sp
-	mov	-16(sp),a0	# path
+1:	add	$40,sp
+	mov	-24(sp),a0	# path
 	shl	$3,a0
-	mov	-8(sp),a1	# mode
+	mov	-16(sp),a1	# flags
+	mov	-8(sp),a2	# mode
 	call	open
 	movslq	%eax,%rax
 	mov	%rax,-8(sp)

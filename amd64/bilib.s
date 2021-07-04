@@ -21,10 +21,8 @@ s:
 .globl f
 f:
 	cmpq	$0,-8(sp)
-	jz	1f
+	jz	t
 	FETCH	8
-1:	mov	(pc),pc
-	FETCH
 
 # transfer
 .globl t
@@ -37,11 +35,10 @@ t:
 y:
 	mov	dp,%rax
 	add	(pc),%rax
-	add	$8,pc
 	lea	8(%rax),%rbx
 	shr	$3,%rbx
 	mov	%rbx,(%rax)
-	FETCH
+	FETCH	8
 
 # switch
 .globl z
@@ -167,7 +164,7 @@ ix:	mov	(pc),%rax
 .globl u2
 u2:
 	negq	-8(sp)
-	FETCH	8
+	FETCH
 
 # * operator
 .globl u3

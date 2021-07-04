@@ -1,0 +1,31 @@
+#!/bin/sh
+
+STUFF='brt2.s printn.s printf.s libb.s bilib.s'
+
+# compile B compiler with the C-B-compiler
+cat bc.b | preproc.sh > bc_x.b
+bb bc_x || exit 1
+rm bc_x.s
+mv a.out bc_c
+bb ba || exit 1
+rm ba.s
+mv a.out ba_c
+
+# now compile B compiler built with the previous compiler
+bc_c bc_x.b bc.i || exit 1
+ba_c bc.i bc.s || exit 1
+cc -o bc_b -g -no-pie brt1.s bc.s $STUFF
+bc_c ba.b ba.i || exit 1
+ba_c ba.i ba.s || exit 1
+cc -o ba_b -g -no-pie brt1.s ba.s $STUFF
+
+# now compile B compiler with itself
+# this concludes the magic
+bc_b bc_x.b bc.i || exit 1
+ba_b bc.i bc.s || exit 1
+cc -o bc -g -no-pie brt1.s bc.s $STUFF
+bc_b ba.b ba.i || exit 1
+ba_b ba.i ba.s || exit 1
+cc -o ba -g -no-pie brt1.s ba.s $STUFF
+
+rm bc.i bc.s ba.i ba.s

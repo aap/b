@@ -38,10 +38,17 @@ main(argc, argv) {
 }
 
 keyw(s, t) {
-	auto sp;
+	extrn namsiz, symbuf;
+	auto n, i, j, c, sp;
 
-	/* PLATFORM: build word string here */
-	sp = lookup(s);
+	n = namsiz;
+	i = j = 0;
+	while(n--) {
+		lchar(symbuf, i++, c = char(s, j++));
+		if(c == '*e')
+			j--;
+	}
+	sp = lookup();
 	sp[0] = KeyType;
 	sp[1] = t;
 }
@@ -168,11 +175,11 @@ func() {
 }
 
 enddef() {
-	extrn loc, stksym, stack, dirty, symsz, symtab, symused;
+	extrn loc, stksym, stack, dirty, symsz, symtab, stablen, symused;
 	auto s;
 
 	s = symtab;
-	while(s < &symtab[SYMTABSZ]) {
+	while(s < &symtab[stablen]) {
 		if(s[2])
 			if(s[0] == 0)
 				error("%p undefined", s+2);
@@ -851,33 +858,42 @@ errflush(t) {
  * Lexical analysis
  */
 
-lookup(s) {
-	extrn symtab, symused, symsz;
-	auto sp;
+lookup() {
+	extrn symbuf, nwps, symtab, stabsz, stablen, symused, symsz;
+	auto i, j, np, sp, rp;
 
-	/* PLATFORM: loop for hash here */
-	sp = s[0];
-	if(sp < 0)
-		sp = -sp;
-	sp =% NSYMS;
-	sp = &symtab[symsz*sp];
-	while(sp[2]) {
-		/* PLATFORM: compare strings here */
-		if(sp[2] == s[0])
-			return(sp);
-		sp =+ symsz;
-		if(sp >= &symtab[SYMTABSZ])
-			sp = &symtab[0];
+	i = 0;
+	sp = symbuf;
+	j = nwps;
+	while(j--)
+		i =+ *sp++;
+	if(i < 0)
+		i = -i;
+	i =% stabsz;
+	i =* symsz;
+	while(*(np = &symtab[i+2])) {
+		sp = symbuf;
+		j = nwps;
+		while(j--)
+			if(*np++ != *sp++)
+				goto no;
+		return(&symtab[i]);
+no:
+		if((i =+ symsz) >= stablen)
+			i = 0;
 	}
-	if(++symused >= NSYMS) {
+	if(++symused >= stabsz) {
 		error("Symbol table overflow");
 		exit(1);
 	}
-	sp[0] = 0;
-	sp[1] = 0;
-	/* PLATFORM: copy string */
-	sp[2] = s[0];
-	return(sp);
+	rp = np = &symtab[i];
+	sp = symbuf;
+	*np++ = 0;
+	*np++ = 0;
+	j = nwps;
+	while(j--)
+		*np++ = *sp++;
+	return(rp);
 }
 
 token() {
@@ -1039,20 +1055,20 @@ mapch(d) {
 }
 
 symbol() {
-	extrn ctab, symbuf, csym, cval;
+	extrn ctab, symbuf, namsiz, csym, cval;
 	auto c, i;
 
 	i = 0;
 	c = getchr();
 	while(ctab[c] == Letter | ctab[c] == Digit) {
-		if(i < NCPS)
+		if(i < namsiz)
 			lchar(symbuf, i++, c);
 		c = getchr();
 	}
-	while(i < NCPS)
+	while(i < namsiz)
 			lchar(symbuf, i++, 0);
 	ungetchr(c);
-	csym = lookup(symbuf);
+	csym = lookup();
 	if(csym[0] == KeyType) {
 		cval = csym[1];
 		return(Keyword);
@@ -1103,17 +1119,13 @@ getchr() {
 ungetchr(c) {
 	extrn peekc, line;
 
-/**/
-	if(peekc)
-		error("peekc not 0");
-/**/
 	if(c == '*n')
 		line--;
 	peekc = c;
 }
 
 xprintf(fmt, x1,x2,x3,x4,x5,x6,x7,x8,x9) {
-	extrn printn, char, putchar;
+	extrn printn, char, putchar, namsiz;
 	auto adx, x, c, i, j;
 
 	i = 0; /* fmt index */
@@ -1143,7 +1155,7 @@ loop:
 		goto loop;
 
 	case 'p': /* symbol */
-		c = NCPS;
+		c = namsiz;
 		j = 0;
 		putchar('_');
 		while(c--)
@@ -1172,8 +1184,11 @@ error(s, p1, p2) {
 
 symbuf[NWPS];
 nwps NWPS;
+namsiz NCPS;
 symsz SYMSZ;
 symused 0;
+stabsz NSYMS;
+stablen SYMTABSZ;
 symtab[SYMTABSZ];	/* SYMSZ*NSYMS */
 ossiz 250;
 ospace[250];

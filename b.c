@@ -23,6 +23,10 @@ int getstr(void);
 int getchr(void);
 void ungetchr(int c);
 
+int loc;
+int prevfix;
+FILE *tmpfil1, *tmpfil2;
+
 int opdope[] = {
 #define X(def, str, prec, flag) prec<<6 | flag,
 OPS
@@ -241,7 +245,7 @@ main(/*int argc, char *argv[]*/)
 		putchar(c);
 	wdconst(0);
 
-	return 0;
+	return nerrors != 0;
 }
 
 void
@@ -299,7 +303,6 @@ extdef(void)
 			skip(n*NBPW);
 			return;
 		}
-		i = 0;
 		datasym(nil);
 		while(t == Const || t == String || t == Name) {
 			switch(t) {
@@ -348,7 +351,6 @@ func(void)
 {
 	Sym *s;
 
-	/* TODO: this could be arch specific */
 	/* Stack layout:
 	 *      auton
 	 *      ....
@@ -398,7 +400,6 @@ decl(int type)
 			sym->type = Auto;
 			sym->val = stack;
 			stack += NBPW;
-//printf(";; %.8s at %d\n", sym->name, sym->val);
 		}
 		t = token();
 		if(type == Auto) {
@@ -493,7 +494,6 @@ stmt:
 		case Goto:
 			setop();
 			genxpr(expr(), 0);
-			/* Is this necessary? probably because if stmt*/
 			pop = 1;
 			etcop(6);
 			goto semi;
@@ -552,16 +552,20 @@ stmt:
 				c++;
 				swp--;
 			}
+			/* this wouldn't be so bad but the PDP-11 runtime
+			 * doesn't handle this case */
+			if(c == 0)
+				err("No cases in switch");
 			label(l2);
 			wdint(c);
 			for(i = 0; i < c; i++) {
 				wdconst((word)swp[i].val);
 				wdlab(swp[i].lab);
 			}
-			/* This is where we insert the default case.
-			 * On the PDP-11 the code just falls through. */
-			/* TODO: what for? something about inst/data? */
-		//	wdlab(deflab);
+			/* Fall through here if no case has been found.
+			 * Put a jump to the default case if there is one. */
+			if(deflab != brklab)
+				jmp(deflab);
 
 			label(brklab);
 			deflab = l3;
@@ -590,6 +594,8 @@ stmt:
 		case Default:
 			if(swp == nil)
 				err("Not in switch");
+			if(deflab)
+				err("default case already defined");
 			if(t = token(), t != Colon)
 				goto syntax;
 			label(deflab = loc++);
@@ -823,6 +829,12 @@ build(int op)
 			return 1;
 		}
 		break;
+	case Star:
+		if(n1->op == Amp) {
+			*np++ = n1->n1;
+			return 0;
+		}
+		break;
 	case Amp:
 		if(n1->op == Star) {
 			*np++ = n1->n1;
@@ -870,7 +882,6 @@ genleaf(Node *n, int lv)
 			oplab(x[lv<<1|i], (int)s->val);
 			break;
 		case Auto:
-//printf("XX %d %d %d", lv, i, s->val);
 			opint(a[lv<<1|i], (int)s->val);
 			break;
 		default:
@@ -964,24 +975,32 @@ genxpr(Node *n, int lv)
 		unaop(op-Amp+1);
 }
 
+/* jump to label l if condition is false,
+ * fall through otherwise. */
 void
 cjmp(Node *n, int l)
 {
-	int l1;
+	int l1, l2;
 
+	/* error */
+	if(n == nil)
+		return;
 	switch(n->op) {
 	case And:
 		cjmp(n->n1, l);
 		cjmp(n->n2, l);
 		return;
 	case Or:
+		cjmp(n->n1, l1=loc++);
+		jmp(l2=loc++);
+		label(l1);
+		cjmp(n->n2, l);
+		label(l2);
+		return;
 	case Not:
 		cjmp(n->n1, l1=loc++);
 		jmp(l);
 		label(l1);
-		if(n->op == Or)
-			cjmp(n->n2, l);
-		return;
 	}
 	genxpr(n, 0);
 	pop = 1;
@@ -1019,7 +1038,7 @@ lookup(char *s)
 	i %= NSYMS;
 	sp = &symtab[i];
 	while(sp->name[0] != '\0') {
-		if(strcmp(sp->name, s) == 0)
+		if(strncmp(sp->name, s, NCPS) == 0)
 			return sp;
 		if(++sp >= &symtab[NSYMS])
 			sp = &symtab[0];
@@ -1064,10 +1083,12 @@ next:
 		c = getchr();
 		if(c == '-') return Predec;
 		ungetchr(c);
+/*
 		if(ctab[c] == Digit) {
 			ungetchr('-');
 			return number();
 		}
+*/
 		return Minus;
 	case Less:
 	less:
