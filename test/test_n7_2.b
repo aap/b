@@ -1,0 +1,2 @@
+main()
+	return(42);

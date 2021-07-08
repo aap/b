@@ -12,8 +12,8 @@ The state of this repo is rather chaotic right now. sorry.
 
 This compiler I wrote to bootstrap B.
 It is a single executable and can produce code
-for PDP-11 and amd64 assemblers.
-On amd64 it is good enough to compile bc.b and ba.b.
+for PDP-11, amd64 and mips32 assemblers.
+On amd64 and mips32 it is good enough to compile bc.b and ba.b.
 On PDP-11 it should also produce good code,
 but it needs some testing.
 
@@ -35,3 +35,4 @@ TODO
 
 - Get rid of chaos
 - More platforms
+- make mips code work on cpus with load delay
