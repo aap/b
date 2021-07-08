@@ -1,8 +1,10 @@
 #!/bin/sh
+SHUTUP=""
+
+cc $SHUTUP -o b -g -Wall -Wextra -Wno-parentheses -Wno-implicit-fallthrough -I.. -I. ../b.c out.c
+
 
 STUFF='brt2.s printn.s printf.s libb.s bilib.s'
-
-cc -o b -g -Wall -Wextra -Wno-parentheses -Wno-implicit-fallthrough -I.. -I. ../b.c out.c
 
 # compile B compiler with the C-B-compiler
 echo compile bc_c
@@ -19,21 +21,21 @@ mv a.out ba_c
 echo compile bc_b with bc_c
 bc_c bc_x.b bc.i || exit 1
 ba_c bc.i bc.s || exit 1
-cc -o bc_b -g -no-pie brt1.s bc.s $STUFF
+cc -o bc_b -g brt1.s bc.s $STUFF
 echo compile ba_b with bc_c
 bc_c ba.b ba.i || exit 1
 ba_c ba.i ba.s || exit 1
-cc -o ba_b -g -no-pie brt1.s ba.s $STUFF
+cc -o ba_b -g brt1.s ba.s $STUFF
 
 # now compile B compiler with itself
 # this concludes the magic
 echo compile bc_b with bc_b
 bc_b bc_x.b bc.i || exit 1
 ba_b bc.i bc.s || exit 1
-cc -o bc -g -no-pie brt1.s bc.s $STUFF
+cc -o bc -g brt1.s bc.s $STUFF
 echo compile ba_b with ba_b
 bc_b ba.b ba.i || exit 1
 ba_b ba.i ba.s || exit 1
-cc -o ba -g -no-pie brt1.s ba.s $STUFF
+cc -o ba -g brt1.s ba.s $STUFF
 
 rm bc.i bc.s ba.i ba.s

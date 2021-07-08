@@ -9,6 +9,9 @@
 
 
 stacksz = 1000
+.data
+.globl _argv
+_argv:	.quad 0
 .bss
 .align 8
 stack:	.space	8*stacksz
@@ -31,8 +34,14 @@ main:
 	mov	%rsp,%rbx
 	shr	$3,%rbx
 	mov	%rbx,24(sp)
-	# copy arguments to stack with word alignment
+	# add argc as element 0 for external argv
+	push	%r11
 	mov	%rsp,%rbx
+	shr	$3,%rbx
+	mov	%rbx,_argv
+	# copy arguments to stack with word alignment
+	# NB: the last word can have junk bytes after the NUL
+	lea	8(%rsp),%rbx
 1:
 	test	%r11,%r11
 	jz	1f		# end of array

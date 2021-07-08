@@ -1,4 +1,4 @@
-/* Turn B intermediate code to amd64 GNU assembly */
+/* Turn B intermediate code to mips32 GNU assembly */
 
 main(argc, argv) {
 	extrn fout, fin, nerror, eof;
@@ -16,15 +16,15 @@ main(argc, argv) {
 		exit(1);
 	}
 
-        printf("*tjmp*tend*n.align 8*n");
+	printf(".set noreorder*n*tj*tend*n*tnop*n");
 	textdata();
 
 	printf(".data*n");
 	strings();
 
-	printf("*n.text*nend:*tcall*tchain*n");
+	printf("*n.text*nend:*tjal*tchain*n*tnop*n");
 	fixup();
-	printf("*t.quad 0*n");
+	printf("*t.word 0*n");
 
 	exit(nerror!=0);
 }
@@ -63,12 +63,12 @@ next:
 	case 'w':	/* word (octal) */
 		if(sect == 3)
 			goto skip;
-		printf(".quad ");
+		printf(".word ");
 		getchar();
 		copyoct('*n');
 		break;
 	case 'v':	/* word (label) */
-		printf(".quad ");
+		printf(".word ");
 		getchar();
 		copy('*n');
 		break;
@@ -94,7 +94,7 @@ next:
 		printf(" = ");
 		goto tobytes;
 	case '*t':	/* B code */
-		printf("*t.quad ");
+		printf("*t.word ");
 		putchar(c = getchar());
 		if(c == 'i')
 			putchar(c = getchar());
@@ -113,7 +113,7 @@ next:
 		tobytes:
 			/* convert offset to bytes */
 			copy('*n');
-			printf("**8");
+			printf("**4");
 			break;
 		default:
 			c = getchar();
@@ -152,7 +152,7 @@ next:
 	case 'w':	/* word (octal) */
 		if(sect != 3)
 			break;
-		printf(".quad ");
+		printf(".word ");
 		getchar();
 		copyoct('*n');
 		putchar('*n');
@@ -184,7 +184,7 @@ next:
 
 	case 'f':	/* fixup label */
 		getchar();
-		printf("*t.quad ");
+		printf("*t.word ");
 		copy('*n');
 		putchar('*n');
 	}

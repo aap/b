@@ -11,8 +11,7 @@ main(argc, argv) {
 		error("Can't find %s", argv[1]);
 		exit(1);
 	}
-/*	if((fout=creat(argv[2], 017))<0) {*/
-	if((fout=open(argv[2], 01101, 0664))<0) {
+	if((fout=creat(argv[2], 0664))<0) {
 		error("Can't create %s", argv[2]);
 		exit(1);
 	}

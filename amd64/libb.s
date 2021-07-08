@@ -59,8 +59,8 @@ _char: .quad 1f
 .text
 1:	.quad 1f
 1:	add	$24,sp
-	mov	-8(sp),%rax	# string
-	mov	(sp),%rcx	# offset
+	mov	16(dp),%rax	# string
+	mov	24(dp),%rcx	# offset
 	xor	%rdx,%rdx
 	movzbl	(%rcx,%rax,8),%edx	# load
 	mov	%rdx,-8(sp)
@@ -71,9 +71,9 @@ _char: .quad 1f
 _lchar: .quad 1f
 .text
 1:	.quad 1f
-1:	mov	16(sp),%rax	# string
-	mov	24(sp),%rcx	# offset
-	movzbl	32(sp),%edx	# char
+1:	mov	16(dp),%rax	# string
+	mov	24(dp),%rcx	# offset
+	movzbl	32(dp),%edx	# char
 	movb	%dl,(%rcx,%rax,8)	# store
 	jmp	n11
 
@@ -83,10 +83,25 @@ _open: .quad 1f
 .text
 1:	.quad 1f
 1:	add	$40,sp
-	mov	-24(sp),a0	# path
+	mov	16(dp),a0	# path
 	shl	$3,a0
-	mov	-16(sp),a1	# flags
-	mov	-8(sp),a2	# mode
+	mov	24(dp),a1	# flags
+	mov	32(dp),a2	# mode
+	call	open
+	movslq	%eax,%rax
+	mov	%rax,-8(sp)
+	jmp	n7
+
+.globl _creat
+.data
+_creat: .quad 1f
+.text
+1:	.quad 1f
+1:	add	$32,sp
+	mov	16(dp),a0	# path
+	shl	$3,a0
+	mov	$01101,a1	# flags, O_CREAT, O_TRUNC, O_WRONLY
+	mov	24(dp),a2	# mode
 	call	open
 	movslq	%eax,%rax
 	mov	%rax,-8(sp)
@@ -97,7 +112,7 @@ _open: .quad 1f
 _close: .quad 1f
 .text
 1:	.quad 1f
-1:	mov	16(sp),a0
+1:	mov	16(dp),a0
 	call 	close
 	jmp	n11
 
@@ -107,9 +122,9 @@ _seek: .quad 1f
 .text
 1:	.quad 1f
 1:	add	$40,sp
-	mov	-24(sp),a0	# fd
-	mov	-16(sp),a1	# off
-	mov	-8(sp),a2	# whence
+	mov	16(dp),a0	# fd
+	mov	24(dp),a1	# off
+	mov	32(dp),a2	# whence
 	call	lseek
 	mov	%rax,-8(sp)
 	jmp	n7
@@ -120,10 +135,10 @@ _write: .quad 1f
 .text
 1:	.quad 1f
 1:	add	$40,sp
-	mov	-24(sp),a0	# fd
-	mov	-16(sp),a1	# buf
+	mov	16(dp),a0	# fd
+	mov	24(dp),a1	# buf
 	shl	$3,a1
-	mov	-8(sp),a2	# count
+	mov	32(dp),a2	# count
 	call	write
 	mov	%rax,-8(sp)
 	jmp	n7
@@ -134,10 +149,10 @@ _read: .quad 1f
 .text
 1:	.quad 1f
 1:	add	$40,sp
-	mov	-24(sp),a0	# fd
-	mov	-16(sp),a1	# buf
+	mov	16(dp),a0	# fd
+	mov	24(dp),a1	# buf
 	shl	$3,a1
-	mov	-8(sp),a2	# count
+	mov	32(dp),a2	# count
 	call	read
 	mov	%rax,-8(sp)
 	jmp	n7
@@ -147,5 +162,5 @@ _read: .quad 1f
 _exit: .quad 1f
 1:	.quad 1f
 .text
-1:	mov	16(sp),a0
+1:	mov	16(dp),a0
 	call	exit
