@@ -4,6 +4,9 @@ SHUTUP=""
 cc $SHUTUP -o b -g -Wall -Wextra -Wno-parentheses -Wno-implicit-fallthrough -I.. -I. ../b.c out.c
 b < ../printn.b > printn.s
 b < ../printf.b > printf.s
+cpp brt1.S > brt1.s
+cpp bilib.S > bilib.s
+cpp libb.S > libb.s
 
 
 STUFF='brt2.s printn.s printf.s libb.s bilib.s'

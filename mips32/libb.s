@@ -14,14 +14,14 @@ _putchar: .word 1f
 1:	.word 1f
 1:	addiu	isp,12
 	lw	$t0,8(idp)	# chars
-	sw	$t0,ch
+	la	$a1,ch
+	sw	$t0,($a1)
 	move	$a2,$zero	# num chars
 1:	beq	$t0,$zero,1f
 	srl	$t0,8
 	b	1b
 	addiu	$a2,1
 1:	lw	$a0,_fout
-	la	$a1,ch
 	jal	write
 	nop
 	j	n7

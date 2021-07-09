@@ -11,15 +11,14 @@ int sect = TEXT;
 void
 prologue(void)
 {
-	prf(".set noreorder\n");
-	prf("\tj\tend\n\tnop\n");
+	prf("\tj\tend\n");
 }
 
 void
 epilogue(void)
 {
 	prf(".text\n");
-	prf("end:\tjal\tchain\n\tnop\n");
+	prf("end:\tjal\tchain\n");
 }
 
 void
@@ -31,70 +30,70 @@ label(int l)
 void
 clab(int l)
 {
-	prf(".data; %l: .word 1f; .text\n1:", l);
+	prf(".data; %l: .dword 1f; .text\n1:", l);
 	sect = TEXT;
 }
 
 void
 etcop(int n)
 {
-	prf("\t.word n%o\n", n);
+	prf("\t.dword n%o\n", n);
 }
 void
 binop(int n)
 {
-	prf("\t.word b%o\n", n);
+	prf("\t.dword b%o\n", n);
 }
 void
 unaop(int n)
 {
-	prf("\t.word u%o\n", n);
+	prf("\t.dword u%o\n", n);
 }
 void
 opsym(char *op, char *s)
 {
-	prf("\t.word %s,%n\n", op, s);
+	prf("\t.dword %s,%n\n", op, s);
 }
 void
 oplab(char *op, int l)
 {
 	if(l == 0)
-		prf("\t.word %s,1f\n", op);
+		prf("\t.dword %s,1f\n", op);
 	else
-		prf("\t.word %s,%l\n", op, l);
+		prf("\t.dword %s,%l\n", op, l);
 }
 void
 opint(char *op, int i)
 {
-	prf("\t.word %s,%D\n", op, i);
+	prf("\t.dword %s,%D\n", op, i);
 }
 void
 opconst(char *op, word w)
 {
-	prf("\t.word %s,%wO\n", op, w);
+	prf("\t.dword %s,%wO\n", op, w);
 }
 void
 wdsym(char *s)
 {
-	prf("\t.word %n\n", s);
+	prf("\t.dword %n\n", s);
 }
 void
 wdlab(int l)
 {
 	if(l == 0)
-		prf("\t.word 1f\n");
+		prf("\t.dword 1f\n");
 	else
-		prf("\t.word %l\n", l);
+		prf("\t.dword %l\n", l);
 }
 void
 wdint(int i)
 {
-	prf("\t.word %D\n", i);
+	prf("\t.dword %D\n", i);
 }
 void
 wdconst(word w)
 {
-	prf("\t.word %wO\n", w);
+	prf("\t.dword %wO\n", w);
 }
 
 void
@@ -152,9 +151,9 @@ void
 fixup(char *s, int n)
 {
 	if(s)
-		fprf(tmpfil2, "\t.word %n\n", s);
+		fprf(tmpfil2, "\t.dword %n\n", s);
 	else
-		fprf(tmpfil2, "\t.word %l\n", n);
+		fprf(tmpfil2, "\t.dword %l\n", n);
 }
 
 void
@@ -172,5 +171,5 @@ strchar(int c)
 void
 endstr(void)
 {
-	fprf(tmpfil1, "0; .align 2\n");
+	fprf(tmpfil1, "0; .align 3\n");
 }

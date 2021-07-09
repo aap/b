@@ -15,6 +15,7 @@ stacksz = 1000
 .globl _argv
 _argv:	.word 0
 .bss
+.align 2
 stack:	.space 4*stacksz
 .text
 
