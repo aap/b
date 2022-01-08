@@ -13,9 +13,7 @@ The state of this repo is rather chaotic right now. sorry.
 This compiler I wrote to bootstrap B.
 It is a single executable and can produce code
 for PDP-11, amd64, mips32 and riscv64 assemblers.
-On amd64, mips32 and riscv64 it is good enough to compile bc.b and ba.b.
-On PDP-11 it should also produce good code,
-but it needs some testing.
+It is good enough to compile bc.b and ba.b.
 
 pdp-8 output should be mostly working, runtime not started yet.
 
@@ -29,6 +27,15 @@ Except for word size the first pass should mostly be
 platform independent.
 The second pass is assembler and to some degree platform
 dependent.
+
+Platforms
+=========
+B has been confirmed to compile itself on the following platforms:
+
+- Linux amd64
+- Linux mips32 (ci20 devboard)
+- Linux riscv64
+- 2.11BSD PDP-11
 
 TODO
 ====

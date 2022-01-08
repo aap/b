@@ -699,32 +699,6 @@ build(op) {
 		*cp++ = block(1, op, p1);
 }
 
-pxpr(x) {
-	extrn opdope;
-	if(x == 0) {
-		printf("nil");
-		return;
-	}
-	printf("(%d ", x[0]);
-	switch(x[0]) {
-	case Name:
-		printf("%p)", x[1]+2);
-		return;
-	case Const:
-		printf("%o)", x[1]);
-		return;
-	case String:
-		printf("l%d)", x[1]);
-		return;
-	}
-        pxpr(x[1]);
-        if((opdope[x[0]]&1)!=0) {
-		putchar(' ');
-                pxpr(x[2]);
-	}
-	printf(")");
-}
-
 genxpr(x, lv) {
 	extrn opdope, pop, loc;
 	auto op, p1, p2, l1, l2;

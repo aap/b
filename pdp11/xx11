@@ -1,0 +1,35 @@
+#!/bin/sh
+
+echo bootstrap PDP-11 compiler from AMD64
+
+STUFF='../amd64/brt2.s ../amd64/printn.s ../amd64/printf.s ../amd64/libb.s ../amd64/bilib.s'
+
+echo compile pdp-11 cross ba
+../amd64/bc_b ba.b ba_x.i || exit 1
+../amd64/ba_b ba_x.i ba_x.s || exit 1
+cc -o ba_x -g -no-pie ../amd64/brt1.s ba_x.s $STUFF || exit 1
+rm ba_x.i ba_x.s
+
+echo compile pdp-11 cross bc
+cat ../bc.b | preproc.sh > bc_x.b
+../amd64/bc_b bc_x.b bc_x.i || exit 1
+../amd64/ba_b bc_x.i bc_x.s || exit 1
+cc -o bc_x -g -no-pie ../amd64/brt1.s bc_x.s $STUFF || exit 1
+rm bc_x.i bc_x.s
+
+echo cross compile pdp-11 ba
+./bc_x ba.b ba_11.i || exit 1
+./ba_x ba_11.i ba.s || exit 1
+rm ba_11.i
+
+echo cross compile pdp-11 bc
+./bc_x bc_x.b bc_11.i || exit 1
+./ba_x bc_11.i bc.s || exit 1
+rm bc_11.i
+
+echo cross compile printf, printn
+./bc_x ../printf.b printf.i || exit 1
+./ba_x printf.i printf.s || exit 1
+./bc_x ../printn.b printn.i || exit 1
+./ba_x printn.i printn.s || exit 1
+rm printf.i printn.i
