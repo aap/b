@@ -360,7 +360,7 @@ next:
 				nsw++;
 				label(loc++);
 			}
-			goto stmt;
+			goto next;
 		case Break:
 			if(brklab == 0)
 				error("Nothing to break from");
@@ -374,7 +374,7 @@ next:
 			if((t = token()) != Colon)
 				goto syntax;
 			label(deflab = loc++);
-			goto stmt;
+			goto next;
 		}
 
 		error("Unknown keyword");
@@ -576,8 +576,12 @@ oponst:
 	if(p > *pp | p == *pp & (opdope[o]&2)!=0) {
 		/* Make parens (and calls) such low precedence
 		 * that only closing paren can pop. */
-		if(p == 036)
+		switch(o) {
+		case LParen:
+		case LBrack:
+		case Call:
 			p = 04;
+		}
 		if(op >= opst+20) {
 			error("expression overflow");
 			exit(1);
@@ -1231,7 +1235,7 @@ opdope[]
 	001403,	/* Colon */
 	001403,	/* Quest */
 	003601,	/* Call */
-	003501,	/* MCall */
+	003601,	/* MCall */
 	000001,	/* Vector */
 	001207,	/* Assign */
 	001601,	/* Or */
