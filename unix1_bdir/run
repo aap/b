@@ -1,0 +1,8 @@
+sh /usr/b/rc bc
+mv a.out nbc
+
+sh /usr/b/rc ba
+mv a.out nba
+
+sh /usr/b/rc bai
+mv a.out nbai

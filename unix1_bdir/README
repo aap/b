@@ -1,0 +1,53 @@
+Disclaimer: all of this is still work in progress
+
+
+The B compiler builds using apout with v1 compatibility
+https://github.com/philbudne/pdp11-B/tree/pb/tools/apout
+with two changes:
+
+1. When using APOUT_UNIX_VERSION=V1 the user memory does not start at 040000.
+change
+	if (Binary == IS_V2) {
+to
+	if (Binary == IS_V2 || Binary == IS_V1) {
+in load_a_out() to fix this.
+
+2. `ar` skips negative argument pointers, i.e. anything above 0100000.
+change
+	posn = KE11LO - 2;
+to
+	posn = 040000*2 - 2;
+in set_arg_env() to circumvent this bug.
+
+
+The `.B` files use symbolic constants that replaced by
+the sed script `preprocv1.sh`. This will NOT work under unix v1.
+After this everything is done with v1/apout.
+
+
+This directory is expected to be /usr/lang/bdir.
+To build and install everything, run `sh install`.
+This will:
+	- build and install libb
+	- build and install bilib
+	- build bc from assembly
+	- build ba from assembly
+	- compile and build bc and ba(i) from B
+The last step can also be invoked separately with `sh run`
+
+There are directories `olibb` and `obilib` as well as `obrt1.s`
+containing older versions of the B library and runtime.
+The B library is not complete because not all functions were
+used by the older programs. The same is actually true for bilib,
+but not much fantasy was needed to restore the missing files.
+These are not built by the install script.
+
+
+There is a directory `int` which contains everything to build
+the compiler using an interpreted code instead of threaded code.
+With this the compiler will fit into 8kb.
+`bai` is a version of `ba` that outputs interpreted code.
+Build the threaded compiler first, then `sh run`.
+This interpreted code is purely my fantasy, but something like
+it is known to have existed at some point.
+With this scheme only 4kw/8kb can be addressed.

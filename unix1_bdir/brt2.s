@@ -1,0 +1,2 @@
+.globl stack
+stack:

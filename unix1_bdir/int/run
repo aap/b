@@ -1,0 +1,54 @@
+echo birt1
+as - bidef.s birt1.s
+mv a.out birt1.o
+
+echo birt2
+as - birt2.s
+mv a.out birt2.o
+
+echo bi
+as - bidef.s bi.s
+mv a.out bi.o
+
+echo bl
+as - bidef.s bl.s
+mv a.out bl.o
+
+echo print
+/usr/lang/bdir/bc print.b print.i
+/usr/lang/bdir/bai print.i print.s
+as - bidef.s print.s
+mv a.out print.o
+rm print.i
+
+echo ibc
+/usr/lang/bdir/bc /usr/lang/bdir/bc.b ibc.i
+/usr/lang/bdir/bai ibc.i ibc.s
+as - bidef.s ibc.s
+ld a.out birt1.o bi.o bl.o birt2.o
+mv a.out ibc
+rm ibc.i
+
+echo ibai
+/usr/lang/bdir/bc /usr/lang/bdir/bai.b ibai.i
+/usr/lang/bdir/bai ibai.i ibai.s
+as - bidef.s ibai.s
+ld a.out print.o birt1.o bi.o bl.o birt2.o
+mv a.out ibai
+rm ibai.i
+
+echo nibc
+ibc /usr/lang/bdir/bc.b bc.i
+ibai bc.i bc.s
+rm bc.i
+as - bidef.s bc.s
+ld a.out birt1.o bi.o bl.o birt2.o
+mv a.out nibc
+
+echo nibai
+ibc /usr/lang/bdir/ba.b ba.i
+ibai ba.i ba.s
+rm ba.i
+as - bidef.s ba.s
+ld a.out print.o birt1.o bi.o bl.o birt2.o
+mv a.out nibai
