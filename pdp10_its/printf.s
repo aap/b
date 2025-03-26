@@ -1,0 +1,129 @@
+RELOCATABLE
+.INSRT B;B DEF
+
+%"printf":
+	.+1
+	OP2 S,21
+	OP2 VA,17
+	OP2 C,0
+	OP B1
+	OP2 IVA,14
+	OP2 VA,3
+	OP B1
+L1:
+L2:
+	OP2 S,21
+	OP2 VA,16
+	OP2 X,%"char"
+	OP N2
+	OP2 A,2
+	OP2 VA,17
+	OP U7
+	OP N3
+	OP B1
+	OP2 C,45
+	OP B5
+	OP2 F,L3
+	OP2 IA,16
+	OP2 C,0
+	OP B4
+	OP2 F,L4
+	OP N11
+L4:
+	OP2 IX,%"putchar"
+	OP N2
+	OP2 A,16
+	OP N3
+	OP2 T,L2
+L3:
+	OP2 IVA,15
+	OP2 VA,14
+	OP U7
+	OP U3
+	OP B1
+	OP2 IVA,16
+	OP2 X,%"char"
+	OP N2
+	OP2 A,2
+	OP2 VA,17
+	OP U7
+	OP N3
+	OP B1
+	OP2 Z,L5
+L6=144
+L7:
+L10=157
+L11:
+	OP2 IX,%"printn"
+	OP N2
+	OP2 A,15
+	OP2 A,16
+	OP2 C,157
+	OP B4
+	OP2 F,L12
+	OP2 IC,10
+	OP2 T,L13
+L12:
+	OP2 IC,12
+L13:
+	OP N3
+	OP2 IX,LL1+0
+	OP N6
+L14=143
+L15:
+	OP2 IX,%"putchar"
+	OP N2
+	OP2 A,15
+	OP N3
+	OP2 IX,LL1+0
+	OP N6
+L16=163
+L17:
+	OP2 IVA,20
+	OP2 C,0
+	OP B1
+L20:
+	OP2 IVA,16
+	OP2 X,%"char"
+	OP N2
+	OP2 A,15
+	OP2 VA,20
+	OP U7
+	OP N3
+	OP B1
+	OP2 C,0
+	OP B5
+	OP2 F,L21
+	OP2 IX,%"putchar"
+	OP N2
+	OP2 A,16
+	OP N3
+	OP2 T,L20
+L21:
+	OP2 IX,LL1+0
+	OP N6
+	OP2 T,.+12
+L5:
+	4
+	L6
+	L7
+	L10
+	L11
+	L14
+	L15
+	L16
+	L17
+	OP2 IX,%"putchar"
+	OP N2
+	OP2 C,45
+	OP N3
+	OP2 IVA,17
+	OP U10
+	OP2 IVA,14
+	OP U10
+	OP2 IX,LL1+0
+	OP N6
+	OP N11
+LL1:
+	L1
+END
