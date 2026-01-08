@@ -16,12 +16,18 @@
 	vx; 1f
 	t; 2f
 1:
-71101
-20147
-67543
-67165
-5164
-0
+.byte 101
+.byte 162
+.byte 147
+.byte 40
+.byte 143
+.byte 157
+.byte 165
+.byte 156
+.byte 164
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	ix; .exit
@@ -46,14 +52,22 @@ L1:
 	vx; 1f
 	t; 2f
 1:
-60503
-23556
-20164
-64546
-62156
-22440
-5163
-0
+.byte 103
+.byte 141
+.byte 156
+.byte 47
+.byte 164
+.byte 40
+.byte 146
+.byte 151
+.byte 156
+.byte 144
+.byte 40
+.byte 45
+.byte 163
+.byte 12
+.byte 0
+.even
 2:
 	x; .argv
 	c; 2
@@ -81,15 +95,24 @@ L2:
 	vx; 1f
 	t; 2f
 1:
-60503
-23556
-20164
-71143
-60545
-62564
-22440
-5163
-0
+.byte 103
+.byte 141
+.byte 156
+.byte 47
+.byte 164
+.byte 40
+.byte 143
+.byte 162
+.byte 145
+.byte 141
+.byte 164
+.byte 145
+.byte 40
+.byte 45
+.byte 163
+.byte 12
+.byte 0
+.even
 2:
 	x; .argv
 	c; 3
@@ -105,11 +128,16 @@ L3:
 	vx; 1f
 	t; 2f
 1:
-65011
-70155
-34440
-5146
-0
+.byte 11
+.byte 152
+.byte 155
+.byte 160
+.byte 40
+.byte 71
+.byte 146
+.byte 12
+.byte 0
+.even
 2:
 	n3
 L4:
@@ -129,9 +157,13 @@ L10:
 	vx; 1f
 	t; 2f
 1:
-22514
-35157
-12
+.byte 114
+.byte 45
+.byte 157
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	x; .getw
 	n1
@@ -145,10 +177,15 @@ L13:
 	vx; 1f
 	t; 2f
 1:
-22514
-36557
-67445
-12
+.byte 114
+.byte 45
+.byte 157
+.byte 75
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	x; .getw
 	n1
@@ -159,11 +196,9 @@ L13:
 	n6
 L14=147
 L15:
-	ix; .read
+	ix; .readsym
 	n2
-	x; .fin
 	a; 10
-	x; .namsiz
 	n3
 	ix; .lchar
 	n2
@@ -176,15 +211,25 @@ L15:
 	vx; 1f
 	t; 2f
 1:
-27012
-66147
-61157
-20154
-22456
-5163
-22456
-35163
-12
+.byte 12
+.byte 56
+.byte 147
+.byte 154
+.byte 157
+.byte 142
+.byte 154
+.byte 40
+.byte 56
+.byte 45
+.byte 163
+.byte 12
+.byte 56
+.byte 45
+.byte 163
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	a; 10
 	a; 10
@@ -198,9 +243,13 @@ L17:
 	vx; 1f
 	t; 2f
 1:
-27011
-31053
-12
+.byte 11
+.byte 56
+.byte 53
+.byte 62
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	ix; 7f+0
@@ -218,9 +267,13 @@ L23:
 	vx; 1f
 	t; 2f
 1:
-46011
-67445
-12
+.byte 11
+.byte 114
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	x; .getw
 	n1
@@ -234,9 +287,12 @@ L25:
 	vx; 1f
 	t; 2f
 1:
-22411
-5157
-0
+.byte 11
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	x; .getw
 	n1
@@ -250,11 +306,16 @@ L27:
 	vx; 1f
 	t; 2f
 1:
-27011
-27075
-22453
-5157
-0
+.byte 11
+.byte 56
+.byte 75
+.byte 56
+.byte 53
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	x; .getw
 	n1
@@ -270,8 +331,11 @@ L31:
 	vx; 1f
 	t; 2f
 1:
-35067
-12
+.byte 67
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	ix; 7f+0
@@ -283,11 +347,17 @@ L33:
 	vx; 1f
 	t; 2f
 1:
-72011
-20073
-25456
-67445
-12
+.byte 11
+.byte 164
+.byte 73
+.byte 40
+.byte 56
+.byte 53
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	x; .getw
 	n1
@@ -309,11 +379,17 @@ L41:
 	vx; 1f
 	t; 2f
 1:
-22411
-35543
-46040
-67445
-12
+.byte 11
+.byte 45
+.byte 143
+.byte 73
+.byte 40
+.byte 114
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	x; .getw
@@ -328,10 +404,15 @@ L43:
 	vx; 1f
 	t; 2f
 1:
-74411
-20073
-67445
-12
+.byte 11
+.byte 171
+.byte 73
+.byte 40
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	x; .getw
 	n1
@@ -362,13 +443,11 @@ L45:
 	n6
 L46=170
 L47:
-	ix; .read
+	ix; .readsym
 	n2
-	x; .fin
 	va; 36
 	x; .blockp
 	b1
-	x; .namsiz
 	n3
 	ix; .lchar
 	n2
@@ -429,11 +508,16 @@ L60:
 	c; 76
 	b5
 	f; L61
+	ia; 4
+	c; 157
+	b4
+	f; L62
 	ivx; .blockp
 	u7
 	x; .getw
 	n1
 	b1
+L62:
 	t; L60
 L61:
 	ia; 36
@@ -447,10 +531,10 @@ L61:
 	b1
 	ix; 7f+0
 	n6
-L62=142
-L63:
-L64=165
-L65:
+L63=142
+L64:
+L65=165
+L66:
 	ix; .build
 	n2
 	a; 4
@@ -459,23 +543,23 @@ L65:
 	n3
 	ix; 7f+0
 	n6
-L66=156
-L67:
+L67=156
+L70:
 	iva; 6
 	x; .getw
 	n1
 	b1
 	ia; 6
-	z; L70
-L71=1
-L72:
+	z; L71
+L72=1
+L73:
 	ix; .sp
 	c; -1
 	b14
 	x; .block
 	n2
 	c; 2
-	c; 24051
+	c; 12051
 	x; .sp
 	c; -1
 	n4
@@ -484,16 +568,16 @@ L72:
 	b1
 	ix; 7f+0
 	n6
-L73=2
-L74:
+L74=2
+L75:
 	ivx; .ap
 	u7
 	x; .sp
 	b1
 	ix; 7f+0
 	n6
-L75=3
-L76:
+L76=3
+L77:
 	iva; 40
 	x; .sp
 	b1
@@ -508,7 +592,7 @@ L76:
 	x; .block
 	n2
 	c; 2
-	c; 24051
+	c; 12051
 	vx; .sp
 	u6
 	u3
@@ -517,48 +601,52 @@ L76:
 	b15
 	n3
 	b1
-L77:
+L100:
 	ia; 6
 	a; 40
 	b7
-	f; L100
+	f; L101
 	ivx; .blockp
 	u7
 	va; 6
 	u7
 	u3
 	b1
-	t; L77
-L100:
+	t; L100
+L101:
 	ivx; .sp
 	u7
 	a; 36
 	b1
 	ix; 7f+0
 	n6
-L101=4
-L102:
+L102=4
+L103:
 	ix; .build
 	n2
-	c; 55535
+	c; 26735
 	n3
 	ix; 7f+0
 	n6
-L103=6
-L104:
-L105=7
-L106:
-L107=11
-L110:
+L104=6
+L105:
+L106=7
+L107:
+L110=11
+L111:
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-22411
-22543
-5157
-0
+.byte 11
+.byte 45
+.byte 143
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	a; 6
@@ -566,15 +654,14 @@ L110:
 	ix; 7f+0
 	n6
 	t; .+40
-L70:
+L71:
 	7
-	L71
 	L72
 	L73
 	L74
 	L75
 	L76
-	L101
+	L77
 	L102
 	L103
 	L104
@@ -582,21 +669,25 @@ L70:
 	L106
 	L107
 	L110
+	L111
 	ix; .error
 	n2
 	vx; 1f
 	t; 2f
 1:
-20156
-67445
-0
+.byte 156
+.byte 40
+.byte 45
+.byte 157
+.byte 0
+.even
 2:
 	a; 6
 	n3
 	ix; 7f+0
 	n6
-L111=77
-L112:
+L112=77
+L113:
 	iva; 40
 	vx; .sp
 	u6
@@ -627,20 +718,20 @@ L112:
 	b1
 	ix; 7f+0
 	n6
-L113=123
-L114:
+L114=123
+L115:
 	ivx; .setstk
 	c; 1
 	b1
 	ix; 7f+0
 	n6
-L115=105
-L116:
+L116=105
 L117:
+L120:
 	ix; .sp
 	x; .stack
 	b11
-	f; L120
+	f; L121
 	ix; .cexpr
 	n2
 	vx; .sp
@@ -651,8 +742,8 @@ L117:
 	ivx; .drop
 	c; 1
 	b1
-	t; L117
-L120:
+	t; L120
+L121:
 	ix; 7f+0
 	n6
 	t; .+154
@@ -698,18 +789,18 @@ L6:
 	L55
 	L56
 	L57
-	L62
 	L63
 	L64
 	L65
 	L66
 	L67
-	L111
+	L70
 	L112
 	L113
 	L114
 	L115
 	L116
+	L117
 L11:
 	t; L4
 L5:
@@ -719,15 +810,25 @@ L5:
 	vx; 1f
 	t; 2f
 1:
-34412
-4472
-71552
-4562
-32562
-61454
-60550
-67151
-12
+.byte 12
+.byte 71
+.byte 72
+.byte 11
+.byte 152
+.byte 163
+.byte 162
+.byte 11
+.byte 162
+.byte 65
+.byte 54
+.byte 143
+.byte 150
+.byte 141
+.byte 151
+.byte 156
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	ix; .chain
@@ -741,9 +842,9 @@ L5:
 	.+2
 	s; 14
 	a; 4
-	c; 55535
+	c; 26735
 	b4
-	f; L121
+	f; L122
 	ix; .build
 	n2
 	c; 142
@@ -755,20 +856,20 @@ L5:
 	iva; 6
 	c; 3
 	b1
-L121:
+L122:
 	ia; 4
-	z; L122
-L123=165
-L124:
+	z; L123
+L124=165
+L125:
 	iva; 10
 	vx; .sp
 	u6
 	u3
 	b1
 	ia; 6
-	z; L125
-L126=1
-L127:
+	z; L126
+L127=1
+L130:
 	ia; 10
 	c; 0
 	n4
@@ -780,7 +881,7 @@ L127:
 	c; 3
 	b4
 	b3
-	f; L130
+	f; L131
 	ivx; .sp
 	u7
 	a; 10
@@ -788,11 +889,11 @@ L127:
 	n4
 	b1
 	n11
-L130:
+L131:
 	ix; 7f+0
 	n6
-L132=3
-L133:
+L133=3
+L134:
 	ia; 10
 	c; 0
 	n4
@@ -804,7 +905,7 @@ L133:
 	c; 1
 	b4
 	b3
-	f; L134
+	f; L135
 	ivx; .sp
 	u7
 	a; 10
@@ -812,17 +913,17 @@ L133:
 	n4
 	b1
 	n11
-L134:
+L135:
 	ix; 7f+0
 	n6
 	t; .+14
-L125:
+L126:
 	2
-	L126
 	L127
-	L132
+	L130
 	L133
-L131:
+	L134
+L132:
 	s; 14
 	vx; .sp
 	u7
@@ -835,8 +936,8 @@ L131:
 	n3
 	b1
 	n11
-L135=142
-L136:
+L136=142
+L137:
 	ivx; .sp
 	u6
 	c; -1
@@ -855,28 +956,33 @@ L136:
 	b1
 	n11
 	t; .+14
-L122:
+L123:
 	2
-	L123
 	L124
-	L135
+	L125
 	L136
+	L137
 	ix; .error
 	n2
 	vx; 1f
 	t; 2f
 1:
-72542
-66151
-20144
-61445
-0
+.byte 142
+.byte 165
+.byte 151
+.byte 154
+.byte 144
+.byte 40
+.byte 45
+.byte 143
+.byte 0
+.even
 2:
 	a; 4
 	n3
 	n11
 7:
-	L131
+	L132
 
 .globl .leaf
 .leaf:
@@ -887,19 +993,19 @@ L122:
 	c; 11
 	n3
 	ix; .drop
-	f; L137
+	f; L140
 	ix; .putchar
 	n2
 	c; 151
 	n3
-L137:
+L140:
 	ia; 4
-	f; L140
+	f; L141
 	ix; .putchar
 	n2
 	c; 166
 	n3
-L140:
+L141:
 	ix; .putchar
 	n2
 	a; 6
@@ -915,16 +1021,21 @@ L140:
 	.+2
 	s; 14
 	x; .setstk
-	f; L141
+	f; L142
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-71411
-20073
-67445
-12
+.byte 11
+.byte 163
+.byte 73
+.byte 40
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	x; .stklvl
 	c; 2
@@ -935,7 +1046,7 @@ L140:
 	c; 0
 	b1
 	b1
-L141:
+L142:
 	iva; 10
 	a; 4
 	c; 1
@@ -943,25 +1054,32 @@ L141:
 	b1
 	ia; 4
 	u3
-	z; L142
-L143=143
-L144:
+	z; L143
+L144=143
+L145:
 	ia; 6
-	f; L145
+	f; L146
 	ix; .error
 	n2
 	vx; 1f
 	t; 2f
 1:
-66151
-62554
-60547
-20154
-73154
-12
+.byte 151
+.byte 154
+.byte 154
+.byte 145
+.byte 147
+.byte 141
+.byte 154
+.byte 40
+.byte 154
+.byte 166
+.byte 12
+.byte 0
+.even
 2:
 	n3
-L145:
+L146:
 	ix; .leaf
 	n2
 	a; 6
@@ -972,15 +1090,19 @@ L145:
 	vx; 1f
 	t; 2f
 1:
-20073
-67445
-12
+.byte 73
+.byte 40
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 10
 	n3
 	n11
-L146=141
-L147:
+L147=141
+L150:
 	ix; .leaf
 	n2
 	a; 6
@@ -991,17 +1113,21 @@ L147:
 	vx; 1f
 	t; 2f
 1:
-20073
-67445
-12
+.byte 73
+.byte 40
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 10
 	c; 2
 	b17
 	n3
 	n11
-L150=151
-L151:
+L151=151
+L152:
 	ix; .leaf
 	n2
 	a; 6
@@ -1012,19 +1138,24 @@ L151:
 	vx; 1f
 	t; 2f
 1:
-20073
-63067
-22453
-5157
-0
+.byte 73
+.byte 40
+.byte 67
+.byte 146
+.byte 53
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 10
 	c; 2
 	b17
 	n3
 	n11
-L152=170
-L153:
+L153=170
+L154:
 	ix; .leaf
 	n2
 	a; 6
@@ -1035,32 +1166,43 @@ L153:
 	vx; 1f
 	t; 2f
 1:
-20073
-22456
-5163
-0
+.byte 73
+.byte 40
+.byte 56
+.byte 45
+.byte 163
+.byte 12
+.byte 0
+.even
 2:
 	a; 10
 	n3
 	n11
-L154=163
-L155:
+L155=163
+L156:
 	ia; 6
-	f; L156
+	f; L157
 	ix; .error
 	n2
 	vx; 1f
 	t; 2f
 1:
-66151
-62554
-60547
-20154
-73154
-12
+.byte 151
+.byte 154
+.byte 154
+.byte 145
+.byte 147
+.byte 141
+.byte 154
+.byte 40
+.byte 154
+.byte 166
+.byte 12
+.byte 0
+.even
 2:
 	n3
-L156:
+L157:
 	ix; .leaf
 	n2
 	c; 1
@@ -1071,14 +1213,23 @@ L156:
 	vx; 1f
 	t; 2f
 1:
-20073
-63061
-4412
-35564
-31040
-5146
-35061
-12
+.byte 73
+.byte 40
+.byte 61
+.byte 146
+.byte 12
+.byte 11
+.byte 164
+.byte 73
+.byte 40
+.byte 62
+.byte 146
+.byte 12
+.byte 61
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	iva; 10
@@ -1091,36 +1242,62 @@ L156:
 	c; 2
 	b14
 	b1
-L157:
+L160:
 	iva; 10
 	u10
-	f; L160
+	f; L161
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-67445
-12
+.byte 56
+.byte 142
+.byte 171
+.byte 164
+.byte 145
+.byte 40
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	va; 12
 	u7
 	u3
 	n3
-	t; L157
-L160:
+	t; L160
+L161:
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-35062
-12
+.byte 56
+.byte 142
+.byte 171
+.byte 164
+.byte 145
+.byte 40
+.byte 60
+.byte 12
+.byte 56
+.byte 145
+.byte 166
+.byte 145
+.byte 156
+.byte 12
+.byte 62
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	n11
-L161=165
-L162:
+L162=165
+L163:
 	iva; 12
 	a; 4
 	c; 2
@@ -1129,9 +1306,9 @@ L162:
 	ia; 10
 	c; 3
 	b4
-	f; L163
-	ia; 6
 	f; L164
+	ia; 6
+	f; L165
 	ix; .cexpr
 	n2
 	a; 4
@@ -1140,7 +1317,7 @@ L162:
 	c; 0
 	n3
 	n11
-L164:
+L165:
 	ia; 12
 	c; 0
 	n4
@@ -1152,7 +1329,7 @@ L164:
 	c; 14
 	b4
 	b3
-	f; L165
+	f; L166
 	ix; .cexpr
 	n2
 	a; 12
@@ -1172,41 +1349,51 @@ L164:
 	vx; 1f
 	t; 2f
 1:
-67011
-5064
-0
+.byte 11
+.byte 156
+.byte 64
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	n11
-L165:
-L163:
+L166:
+L164:
 	ia; 6
-	f; L166
+	f; L167
 	ix; .error
 	n2
 	vx; 1f
 	t; 2f
 1:
-66151
-62554
-60547
-20154
-73154
-12
+.byte 151
+.byte 154
+.byte 154
+.byte 145
+.byte 147
+.byte 141
+.byte 154
+.byte 40
+.byte 154
+.byte 166
+.byte 12
+.byte 0
+.even
 2:
 	n3
-L166:
+L167:
 	ia; 10
 	c; 1
 	b4
-	f; L167
+	f; L170
 	ix; .cexpr
 	n2
 	a; 12
 	c; 1
 	n3
 	n11
-L167:
+L170:
 	ix; .cexpr
 	n2
 	a; 12
@@ -1223,34 +1410,45 @@ L167:
 	vx; 1f
 	t; 2f
 1:
-22411
-22543
-5157
-0
+.byte 11
+.byte 45
+.byte 143
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	u3
 	a; 10
 	n3
 	n11
-L170=142
-L171:
+L171=142
+L172:
 	ia; 6
-	f; L172
+	f; L173
 	ix; .error
 	n2
 	vx; 1f
 	t; 2f
 1:
-66151
-62554
-60547
-20154
-73154
-12
+.byte 151
+.byte 154
+.byte 154
+.byte 145
+.byte 147
+.byte 141
+.byte 154
+.byte 40
+.byte 154
+.byte 166
+.byte 12
+.byte 0
+.even
 2:
 	n3
-L172:
+L173:
 	ix; .cexpr
 	n2
 	a; 4
@@ -1276,18 +1474,22 @@ L172:
 	vx; 1f
 	t; 2f
 1:
-22411
-22543
-5157
-0
+.byte 11
+.byte 45
+.byte 143
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	u3
 	a; 10
 	n3
 	n11
-L173=77
-L174:
+L174=77
+L175:
 	ix; .cexpr
 	n2
 	a; 4
@@ -1303,11 +1505,16 @@ L174:
 	vx; 1f
 	t; 2f
 1:
-63011
-20073
-22514
-5157
-0
+.byte 11
+.byte 146
+.byte 73
+.byte 40
+.byte 114
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	c; 1
@@ -1328,11 +1535,16 @@ L174:
 	vx; 1f
 	t; 2f
 1:
-72011
-20073
-22514
-5157
-0
+.byte 11
+.byte 164
+.byte 73
+.byte 40
+.byte 114
+.byte 45
+.byte 157
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	c; 1
@@ -1345,9 +1557,13 @@ L174:
 	vx; 1f
 	t; 2f
 1:
-22514
-35157
-12
+.byte 114
+.byte 45
+.byte 157
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	c; 1
@@ -1365,9 +1581,13 @@ L174:
 	vx; 1f
 	t; 2f
 1:
-22514
-35157
-12
+.byte 114
+.byte 45
+.byte 157
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	c; 1
@@ -1376,8 +1596,8 @@ L174:
 	b14
 	n3
 	n11
-L175=24051
-L176:
+L176=12051
+L177:
 	ix; .cexpr
 	n2
 	a; 4
@@ -1393,27 +1613,33 @@ L176:
 	ia; 10
 	c; 0
 	b4
-	f; L177
+	f; L200
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-67011
-5061
-0
+.byte 11
+.byte 156
+.byte 61
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	n11
-L177:
+L200:
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-67011
-5062
-0
+.byte 11
+.byte 156
+.byte 62
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	iva; 12
@@ -1421,10 +1647,10 @@ L177:
 	c; 3
 	b14
 	b1
-L200:
+L201:
 	iva; 10
 	u10
-	f; L201
+	f; L202
 	ix; .cexpr
 	n2
 	va; 12
@@ -1432,25 +1658,27 @@ L200:
 	u3
 	c; 0
 	n3
-	t; L200
-L201:
+	t; L201
+L202:
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-67011
-5063
-0
+.byte 11
+.byte 156
+.byte 63
+.byte 12
+.byte 0
+.even
 2:
 	n3
 	n11
 	t; .+50
-L142:
+L143:
 	11
-	L143
 	L144
-	L146
+	L145
 	L147
 	L150
 	L151
@@ -1458,27 +1686,36 @@ L142:
 	L153
 	L154
 	L155
-	L161
+	L156
 	L162
-	L170
+	L163
 	L171
-	L173
+	L172
 	L174
 	L175
 	L176
+	L177
 	ix; .error
 	n2
 	vx; 1f
 	t; 2f
 1:
-67165
-67153
-73557
-20156
-70157
-22440
-5143
-0
+.byte 165
+.byte 156
+.byte 153
+.byte 156
+.byte 157
+.byte 167
+.byte 156
+.byte 40
+.byte 157
+.byte 160
+.byte 40
+.byte 45
+.byte 143
+.byte 12
+.byte 0
+.even
 2:
 	a; 4
 	u3
@@ -1495,33 +1732,43 @@ L142:
 	.+2
 	s; 4
 	x; .chn
-	f; L202
+	f; L203
 	ix; .printf
 	n2
 	vx; 1f
 	t; 2f
 1:
-34011
-26542
-5062
-35070
-12
+.byte 11
+.byte 70
+.byte 142
+.byte 55
+.byte 62
+.byte 12
+.byte 70
+.byte 72
+.byte 12
+.byte 0
+.even
 2:
 	n3
-	t; L203
-L202:
-	ix; .printf
-	n2
-	vx; 1f
-	t; 2f
-1:
-30011
-34012
-5072
-0
-2:
-	n3
+	t; L204
 L203:
+	ix; .printf
+	n2
+	vx; 1f
+	t; 2f
+1:
+.byte 11
+.byte 60
+.byte 12
+.byte 70
+.byte 72
+.byte 12
+.byte 0
+.even
+2:
+	n3
+L204:
 	ivx; .chn
 	c; 1
 	b1
@@ -1531,18 +1778,92 @@ L203:
 .globl .getw
 .getw:
 	.+2
-	s; 6
-	va; 4
+	s; 12
+	va; 10
 	c; 0
 	b1
-	ix; .read
-	n2
-	x; .fin
-	va; 4
-	c; 2
-	n3
+	iva; 4
+	c; 0
+	b1
+L205:
+	iva; 6
+	x; .getchar
+	n1
+	b1
+	c; 40
+	b5
+	f; L206
+	ia; 6
+	c; 55
+	b4
+	f; L207
+	iva; 10
+	c; 1
+	b1
+	t; L210
+L207:
+	iva; 4
+	a; 4
+	c; 10
+	b17
+	a; 6
+	b14
+	c; 60
+	b15
+	b1
+L210:
+	t; L205
+L206:
+	ia; 10
+	f; L211
+	iva; 4
+	a; 4
+	u2
+	b1
+L211:
 	ia; 4
 	n7
+	n11
+7:
+
+.globl .readsym
+.readsym:
+	.+2
+	s; 12
+	va; 6
+	c; 0
+	b1
+L212:
+	iva; 10
+	x; .getchar
+	n1
+	b1
+	c; 40
+	b5
+	f; L213
+	ix; .lchar
+	n2
+	a; 4
+	va; 6
+	u7
+	a; 10
+	n3
+	t; L212
+L213:
+L214:
+	ia; 6
+	x; .namsiz
+	b7
+	f; L215
+	ix; .lchar
+	n2
+	a; 4
+	va; 6
+	u7
+	c; 0
+	n3
+	t; L214
+L215:
 	n11
 7:
 
@@ -1558,18 +1879,18 @@ L203:
 	b1
 	iva; 4
 	u7
-L204:
+L216:
 	iva; 4
 	u10
-	f; L205
+	f; L217
 	ivx; .blockp
 	u7
 	va; 22
 	u7
 	u3
 	b1
-	t; L204
-L205:
+	t; L216
+L217:
 	ia; 20
 	n7
 	n11

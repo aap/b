@@ -3,6 +3,9 @@ idp = r4
 isp = r5
 stacksz = 512
 
+.globl x, n1
+.globl _main
+
 .data
 .globl _argv
 _argv: 0

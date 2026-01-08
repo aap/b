@@ -4,6 +4,7 @@ sed -e '1,$s/NWPS/1/g'\
 	-e '1,$s/SYMSZ/3/g'\
 	-e '1,$s/NSYMS/400/g'\
 	-e '1,$s/SYMTABSZ/1200/g'\
+	-e '1,$s/PERM/0664/g'\
 	-e '1,$s/KeyType/1/g'\
 	-e '1,$s/Intern/2/g'\
 	-e '1,$s/Extern/3/g'\

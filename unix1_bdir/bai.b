@@ -32,7 +32,7 @@ main() {
 			goto cont;
 
 		case 'g':
-			read(fin, sym, namsiz);
+			readsym(sym);
 			lchar(sym, namsiz, '*0');
 			printf("*n.globl .%s*n*.%s:*n", sym, sym);
 			goto cont;
@@ -78,7 +78,7 @@ main() {
 			goto cont;
 
 		case 'x':
-			read(fin, p=blockp, namsiz);
+			readsym(p=blockp);
 			lchar(p, namsiz, '*0');
 			blockp =+ 8;
 			*sp++ = block(1, o, p);
@@ -92,7 +92,8 @@ main() {
 		case '<':
 			*sp++ = p = block(1, 's', 0);
 			while((o=getchar()) != '>')
-				*blockp++ = getw();
+				if(o == 'o')
+					*blockp++ = getw();
 			p[1] = blockp-p-2;
 			goto cont;
 
@@ -245,8 +246,8 @@ cexpr(x, lv) {
 		n = x[1];
 		p = x+2;
 		while(n--)
-			printf("%o*n", *p++);
-		printf("2:*n");
+			printf(".byte %o*n", *p++);
+		printf(".byte 0*n.even*n2:*n");
 		return;
 
 	case 'u':
@@ -323,11 +324,30 @@ chain() {
 
 getw() {
 	extrn fin;
-	auto w;
+	auto w, c, neg;
 
+	neg = 0;
 	w = 0;
-	read(fin, &w, 2);
+	while((c=getchar()) != ' ') {
+		if(c == '-')
+			neg = 1;
+		else
+			w = w*8 + c-'0';
+	}
+	if(neg)
+		w = -w;
 	return(w);
+}
+
+readsym(s) {
+	extrn namsiz;
+	auto i, c;
+
+	i = 0;
+	while((c=getchar()) != ' ')
+		lchar(s, i++, c);
+	while(i < namsiz)
+		lchar(s, i++, '*0');
 }
 
 block(n, o, a1, a2, a3, a4) {

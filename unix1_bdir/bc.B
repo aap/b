@@ -321,21 +321,39 @@ deflab() {
 	}
 }
 label(n) gen1('L', n);
-putw(w) extrn fout; write(fout, &w, NCPW);
-gen0(o) putchar(o);
+putw(w) {
+	if(w < 0)
+		putchar('-');
+	prtn(w, 8);
+	putchar(' ');
+}
+putsym(s) {
+	extrn namsiz;
+	auto i, c;
+	i = 0;
+	while(i < namsiz & (c=char(s,i++))!=0)
+		putchar(c);
+	putchar(' ');
+}
+gen0(o) {
+	putchar(o);
+	putchar('*n');
+}
 gen1(o, a) {
 	putchar(o);
 	putw(a);
+	putchar('*n');
 }
 gen2(o, a, b) {
 	putchar(o);
 	putw(a);
 	putw(b);
+	putchar('*n');
 }
 gensym(o, s) {
-	extrn fout, namsiz;
 	putchar(o);
-	write(fout, s, namsiz);
+	putsym(s);
+	putchar('*n');
 }
 
 
@@ -471,9 +489,9 @@ advanc:
 	andflg = 0;
 
 oponst:
-	p = (opdope[o]>>6) & 077;
+	p = opdope[o];
 	/* new op binds tighter, so push onto stack */
-	if(p>*pp | p==*pp & (opdope[o]&2)!=0) {
+	if(p>*pp | p==*pp & (p&1)!=0) {
 		switch(o) {
 		/* Make parens (and calls) such low precedence
 		 * that only closing paren can pop. */
@@ -710,28 +728,19 @@ subseq(c,a,b) {
 }
 
 getstr() {
-	extrn cval, loc;
-	auto c, i, buf;
+	auto c;
 
-	buf = i = 0;
-	while((c=mapch('"'))>=0) {
-		lchar(&buf, i++, c);
-		if(i==NCPW) {
-			gen1('o', buf);
-			buf = i = 0;
-		}
-	}
-	gen1('o', buf);
+	while((c=mapch('"'))>=0)
+		gen1('o', c);
 }
 
 getcc() {
-	extrn cval;
-	auto c, i;
+	extrn cval, nbpc;
+	auto c;
 
-	i = 0;
 	cval = 0;
 	while((c = mapch('*'')) >= 0)
-		cval = (cval<<8) + c;
+		cval = (cval<<nbpc) + c;
 	return(Const);
 }
 
@@ -753,6 +762,7 @@ mapch(d) {
 		case '0':
 		case 'e': return('*0');
 		case 't': return('*t');
+		case 'r': return(015);
 		case 'n': return('*n');
 		}
 	}
@@ -792,6 +802,7 @@ ungetchr(c) {
 prtn(n, b) {
 	auto a;
 
+	if(n < 0) n = -n;
 	if(a = n/b)
 		prtn(a, b);
 	putchar(n%b + '0');
@@ -809,7 +820,7 @@ err(c, sym) {
 	putchar(c);
 	if(sym) {
 		putchar(' ');
-		write(fout, sym, namsiz);
+		putsym(sym);
 	}
 	putchar('*n');
 	fout = f;
@@ -817,6 +828,7 @@ err(c, sym) {
 
 symbuf[NWPS];
 nwps NWPS;
+nbpc 7;
 namsiz NCPS;
 symsz SYMSZ;
 symused 0;
@@ -857,71 +869,68 @@ ctab[128]
 	Letter,  Letter,  Letter,  Letter,  Letter,  Letter,  Letter,  Letter,
 	Letter,  Letter,  Letter,  LBrace,  Or,      RBrace,  Invalid, Invalid;
 
+/* precedence, odd means right assoc */
 opdope[]
-	/* 00pp00 is precedence.
-	 * 000001 is binary
-	 * 000002 is right assoc.
-	 * 000004 is lval */
-	000000,	/* None */
-	000000,	/* Space */
-	000000,	/* DQuote  ---- unused*/
-	000000,	/* SQuote */
-	003600,	/* LParen */
-	000200,	/* RParen */
-	003600,	/* LBrack */
-	000200,	/* RBrack */
-	000000,	/* LBrace */
-	000000,	/* RBrace */
-	000000,	/* Semi */
-	000000,	/* Digit */
-	000000,	/* Letter */
-	000000,	/* Const */
-	000000,	/* String */
-	000000,	/* Name */
-	000000,	/* Keyword */
-	000701,	/* Comma */
-	001403,	/* Colon */
-	001403,	/* Quest */
-	003601,	/* Call */
-	003601,	/* MCall */
-	000001,	/* Vector */
-	001207,	/* Assign */
-	001601,	/* Or */
-	002001,	/* And */
-	002201,	/* Eq */
-	002201,	/* Neq */
-	002401,	/* Leq */
-	002401,	/* Less */
-	002401,	/* Geq */
-	002401,	/* Greater */
-	002601,	/* RShift */
-	002601,	/* LShift */
-	003001,	/* Plus */
-	003001,	/* Minus */
-	003201,	/* Mod */
-	003201,	/* Times */
-	003201,	/* Div */
-	001207,	/* AOr */
-	001207,	/* AAnd */
-	001207,	/* AEq */
-	001207,	/* ANeq */
-	001207,	/* ALeq */
-	001207,	/* ALess */
-	001207,	/* AGeq */
-	001207,	/* AGreater */
-	001207,	/* ARShift */
-	001207,	/* ALShift */
-	001207,	/* APlus */
-	001207,	/* AMinus */
-	001207,	/* AMod */
-	001207,	/* ATimes */
-	001207,	/* ADiv */
-	003406,	/* Amp */
-	003402,	/* Neg */
-	003402,	/* Star */
-	003402,	/* Not */
-	003406,	/* Preinc */
-	003406,	/* Predec */
-	003406,	/* Postinc */
-	003406	/* Postdec */
+	000,	/* None */
+	000,	/* Space */
+	000,	/* DQuote  ---- unused*/
+	000,	/* SQuote */
+	036,	/* LParen */
+	002,	/* RParen */
+	036,	/* LBrack */
+	002,	/* RBrack */
+	000,	/* LBrace */
+	000,	/* RBrace */
+	000,	/* Semi */
+	000,	/* Digit */
+	000,	/* Letter */
+	000,	/* Const */
+	000,	/* String */
+	000,	/* Name */
+	000,	/* Keyword */
+	006,	/* Comma */
+	015,	/* Colon */
+	015,	/* Quest */
+	036,	/* Call */
+	036,	/* MCall */
+	000,	/* Vector */
+	013,	/* Assign */
+	016,	/* Or */
+	020,	/* And */
+	022,	/* Eq */
+	022,	/* Neq */
+	024,	/* Leq */
+	024,	/* Less */
+	024,	/* Geq */
+	024,	/* Greater */
+	026,	/* RShift */
+	026,	/* LShift */
+	030,	/* Plus */
+	030,	/* Minus */
+	032,	/* Mod */
+	032,	/* Times */
+	032,	/* Div */
+	013,	/* AOr */
+	013,	/* AAnd */
+	013,	/* AEq */
+	013,	/* ANeq */
+	013,	/* ALeq */
+	013,	/* ALess */
+	013,	/* AGeq */
+	013,	/* AGreater */
+	013,	/* ARShift */
+	013,	/* ALShift */
+	013,	/* APlus */
+	013,	/* AMinus */
+	013,	/* AMod */
+	013,	/* ATimes */
+	013,	/* ADiv */
+	035,	/* Amp */
+	035,	/* Neg */
+	035,	/* Star */
+	035,	/* Not */
+	035,	/* Preinc */
+	035,	/* Predec */
+	035,	/* Postinc */
+	035	/* Postdec */
 ;
