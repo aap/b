@@ -1,0 +1,4 @@
+echo $1
+as - $1.s
+mv a.out $1.o
+ar r ../bilib.a $1.o

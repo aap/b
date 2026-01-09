@@ -1,0 +1,34 @@
+/ B library -- execv
+
+.globl	.execv
+.globl	n11
+
+.data
+.execv:
+	0f
+.text
+0:
+	.+2
+	mov	r4,r5
+	cmp	(r5)+,(r5)+
+	asl	(r5)
+	mov	(r5)+,0f
+	mov	(r5),r0
+	asl	r0
+	mov	r5,0f+2
+	mov	r5,r1
+	mov	2(r5),-(sp)
+1:
+	dec	(sp)
+	blt	2f
+	mov	(r0)+,(r1)
+	asl	(r1)+
+	bne	1b
+2:
+	tst	(sp)+
+	clr	(r1)+
+	sys	0; 9f
+	jmp	n11
+.data
+9:
+	sys	exec; 0:..; ..

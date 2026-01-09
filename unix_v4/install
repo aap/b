@@ -1,0 +1,35 @@
+rm libb.a
+chdir libb
+sh run
+chdir ..
+cp libb.a /lib/libb.a
+
+rm bilib.a
+chdir bilib
+sh run
+chdir ..
+cp bilib.a /usr/lib/libb.a
+
+echo brt1
+as - brt1.s
+mv a.out brt1.o
+
+echo brt2
+as - brt2.s
+mv a.out brt2.o
+
+echo bc
+as - bc.s
+mv a.out bc.o
+ld bc.o brt1.o -lb /usr/lib/bilib.a brt2.o
+mv a.out bc
+
+echo ba
+as - ba.s
+mv a.out ba.o
+ld ba.o brt1.o -lb /usr/lib/bilib.a brt2.o
+mv a.out ba
+
+cp b /usr/bin/b
+
+sh run

@@ -1,0 +1,5 @@
+sh /usr/bin/b bc
+mv a.out nbc
+
+sh /usr/bin/b ba
+mv a.out nba
