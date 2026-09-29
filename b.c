@@ -1001,6 +1001,7 @@ cjmp(Node *n, int l)
 		cjmp(n->n1, l1=loc++);
 		jmp(l);
 		label(l1);
+                return;
 	}
 	genxpr(n, 0);
 	pop = 1;

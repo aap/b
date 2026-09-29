@@ -446,6 +446,7 @@ cjmp(x, l) {
 		cjmp(x[1], l1=loc++);
 		jmp(l);
 		label(l1);
+                return;
 	}
 	genxpr(x, 0);
 	pop = 1;
